@@ -12,10 +12,12 @@ Proszę również udostępnić porty (EXPOSE) dla aplikacji w React'cie
 oraz aplikacji w Play. Dodatkowo proszę przeznaczyć jeden folder do
 wymiany danych pomiędzy hostem a kontenerem (VOLUME).
 
-## Podsumowując:
+## Podsumowując
 - Java 8
 - Scala 2.12
 - sbt
 - npm
 
 ## Link do dockerhuba:
+
+https://hub.docker.com/repository/docker/dominikajadach/zadanie1
