@@ -43,6 +43,8 @@ EXPOSE 5000
 EXPOSE 8888
 EXPOSE 3000
 
+RUN apt-get install -y apt-utils sudo wget -f
+
 RUN useradd -ms /bin/bash dominikajadach
 RUN adduser dominikajadach sudo
 
