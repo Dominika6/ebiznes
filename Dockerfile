@@ -46,7 +46,8 @@ EXPOSE 3000
 RUN apt-get install -y apt-utils sudo wget -f
 
 RUN useradd -ms /bin/bash dominikajadach
-RUN adduser dominikajadach sudo
+RUN adduser dominikajadach sudo &&\
+    passwd -d dominikajadach
 
 USER dominikajadach
 WORKDIR /home/dominikajadach/
