@@ -30,12 +30,25 @@ RUN echo "deb https://dl.bintray.com/sbt/debian /" | tee -a /etc/apt/sources.lis
     apt-get install -y curl gnupg2 &&\
     apt-get install -y sbt
 
-# npm 6.8
-RUN apt install -y npm && npm install -g npm@6.8.0
+# npm latest
+RUN apt install -y npm &&\
+    curl -sL "https://deb.nodesource.com/setup_12.x" | bash &&\
+    apt-get update &&\
+    apt install -y nodejs &&\
+    npm install -y npm@latest
 
 EXPOSE 8000
 EXPOSE 9000
 EXPOSE 5000
 EXPOSE 8888
+EXPOSE 3000
 
-VOLUME ["/home/dominika/"]
+RUN useradd -ms /bin/bash dominikajadach
+RUN adduser dominikajadach sudo
+
+USER dominikajadach
+WORKDIR /home/dominikajadach/
+RUN mkdir /home/dominikajadach/workshop/
+
+VOLUME ["/home/dominikajadach/workshop/"]
+
