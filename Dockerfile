@@ -30,12 +30,10 @@ RUN echo "deb https://dl.bintray.com/sbt/debian /" | tee -a /etc/apt/sources.lis
     apt-get install -y curl gnupg2 &&\
     apt-get install -y sbt
 
-# npm latest
-RUN apt install -y npm &&\
-    curl -sL "https://deb.nodesource.com/setup_12.x" | bash &&\
-    apt-get update &&\
-    apt install -y nodejs &&\
-    npm install -y npm@latest
+# npm i nodejs
+RUN curl -fsSL https://deb.nodesource.com/setup_15.x | bash - &&\
+    apt-get install -y nodejs
+
 
 EXPOSE 8000
 EXPOSE 9000
