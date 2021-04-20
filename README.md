@@ -12,12 +12,20 @@ Proszę również udostępnić porty (EXPOSE) dla aplikacji w React'cie
 oraz aplikacji w Play. Dodatkowo proszę przeznaczyć jeden folder do
 wymiany danych pomiędzy hostem a kontenerem (VOLUME).
 
-## Podsumowując
+### Podsumowując
 - Java 8
 - Scala 2.12
 - sbt
 - npm
 
-## Link do dockerhuba:
+### Link do dockerhuba:
 
 https://hub.docker.com/repository/docker/dominikajadach/zadanie1
+
+## Zadanie 2 - kontrolery
+
+Należy stworzyć dziesięć kontrolerów oraz odpowiadającą metodom
+kontrolerów tablicę routingu. Należy przyjąć jako przykład sklep oraz
+odpowiadającą sklepu 10 kontrolerów, w każdym kontrolerze powinny być
+metody CRUD (Create Read Update Delete). Metody powinny być wydmuszką
+(mock), czyli bez istotnej implementacji.
