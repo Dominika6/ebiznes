@@ -1,0 +1,11 @@
+version: '3'
+services:
+  ebiznes:
+    build: .
+    ports:
+      - 12345:9000
+      - 12346:3000
+    volumes:
+      - .:/home/dominikajadach/
+    working_dir: /home/dominikajadach/
+    command: sbt run

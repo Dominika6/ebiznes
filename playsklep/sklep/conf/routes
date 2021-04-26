@@ -1,0 +1,85 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# https://www.playframework.com/documentation/latest/ScalaRouting
+# ~~~~
+
+# An example controller showing a sample home page
+GET     /                           controllers.HomeController.index()
+
+# Map static resources from the /public folder to the /assets URL path
+GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
+
+
+GET         /auth/registration              controllers.AuthController.registration
+POST        /auth/registrationHandler       controllers.AuthController.registrationHandler
+GET         /auth/login                     controllers.AuthController.login
+POST        /auth/loginHandler              controllers.AuthController.loginHandler
+GET         /auth/logout                    controllers.AuthController.logout
+
+GET         /add/comments                   controllers.CommentController.create
+POST        /createCommentHandler           controllers.CommentController.createCommentHandler
+GET         /comments                       controllers.CommentController.getAll
+GET         /update/comments/:commentId     controllers.CommentController.update(commentId: String)
+POST        /updateCommentHandler           controllers.CommentController.updateCommentHandler(commentId: String)
+GET         /delete/comments/:commentId     controllers.CommentController.delete(commentId: String)
+
+GET         /add/filmType                   controllers.FilmTypeController.create
+POST        /createTypeHandler              controllers.FilmTypeController.createTypeHandler
+GET         /filmType/:typeId               controllers.FilmTypeController.get(typeId: String)
+GET         /filmType                       controllers.FilmTypeController.getAll
+GET         /update/filmType/:typeId        controllers.FilmTypeController.update(typeId: String)
+POST        /updateTypeHandler              controllers.FilmTypeController.updateTypeHandler(typeId: String)
+GET         /delete/filmType/:typeId        controllers.FilmTypeController.delete(typeId: String)
+
+GET         /add/actor                      controllers.MainActorController.create
+POST        /createActorHandler             controllers.MainActorController.createActorHandler
+GET         /actor/:actorId                 controllers.MainActorController.get(actorId: String)
+GET         /actor                          controllers.MainActorController.getAll
+GET         /update/actor/:actorId          controllers.MainActorController.update(actorId: String)
+POST        /updateActorHandler             controllers.MainActorController.updateActorHandler(actorId: String)
+GET         /delete/actor/:actorId          controllers.MainActorController.delete(actorId: String)
+
+GET         /add/movies                     controllers.MovieController.create
+POST        /createMovieHandler             controllers.MovieController.createMovieHandler
+GET         /movies/:movieId                controllers.MovieController.get(movieId: String)
+GET         /movies                         controllers.MovieController.getAll
+GET         /update/movies/:movieId         controllers.MovieController.update(movieId: String)
+POST        /updateMovieHandler             controllers.MovieController.updateMovieHandler(movieId: String)
+GET         /delete/movies/:movieId         controllers.MovieController.delete(movieId: String)
+
+GET         /directors                      controllers.MovieDirectorController.getAll
+GET         /directors/:directorId          controllers.MovieDirectorController.get(directorId: String)
+GET         /add/directors                  controllers.MovieDirectorController.create
+GET         /delete/directors/:directorId   controllers.MovieDirectorController.delete(directorId: String)
+GET         /update/directors/:directorId   controllers.MovieDirectorController.update(directorId: String)
+POST        /createDirectorHandler          controllers.MovieDirectorController.createDirectorHandler
+POST        /updateDirectorHandler          controllers.MovieDirectorController.updateDirectorHandler(directorId: String)
+
+GET         /add/orders                     controllers.OrderController.create
+POST        /createOrderHandler             controllers.OrderController.createOrderHandler
+GET         /orders/:orderId                controllers.OrderController.get(orderId: String)
+GET         /orders                         controllers.OrderController.getAll
+GET         /update/orders/:orderId         controllers.OrderController.update(orderId: String)
+POST        /updateOrderHandler             controllers.OrderController.updateOrderHandler(orderId: String)
+GET         /delete/orders/:orderId         controllers.OrderController.delete(orderId: String)
+
+GET         /add/payments                   controllers.PayController.create
+POST        /createPaymentHandler           controllers.PayController.createPaymentHandler
+GET         /payments                       controllers.PayController.getAll
+GET         /update/payment/:paymentId      controllers.PayController.update(paymentId: String)
+POST        /updatePaymentHandler           controllers.PayController.updatePaymentHandler(paymentId: String)
+GET         /delete/payment/:paymentId      controllers.PayController.delete(paymentId: String)
+
+GET         /add/rate                       controllers.RateController.create
+POST        /createRateHandler              controllers.RateController.createRateHandler
+GET         /rate                           controllers.RateController.getAll
+GET         /update/rate/:rateId            controllers.RateController.update(rateId: String)
+POST        /updateRateHandler              controllers.RateController.updateRateHandler(rateId: String)
+GET         /delete/rate/:rateId            controllers.RateController.delete(rateId: String)
+
+# create user jest w: /auth/registration (controllers.AuthController.registration)
+GET         /user                           controllers.UserController.getAll
+GET         /update/user/:userId            controllers.UserController.update(userId: String)
+POST        /updateUserHandler              controllers.UserController.updateUserHandler(userId: String)
+GET         /delete/user/:userId            controllers.UserController.delete(userId: String)
+
