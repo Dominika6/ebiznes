@@ -29,3 +29,19 @@ kontrolerów tablicę routingu. Należy przyjąć jako przykład sklep oraz
 odpowiadającą sklepu 10 kontrolerów, w każdym kontrolerze powinny być
 metody CRUD (Create Read Update Delete). Metody powinny być wydmuszką
 (mock), czyli bez istotnej implementacji.
+
+## Zadanie 3 - modele
+
+Należy stworzyć dziesięć modeli, gdzie każdy model powinnien mieć
+implementację CRUD (Create Read Update Delete).
+
+## Zadanie 4 - REST API
+
+Należy stworzyć wykorzystać stworzone wcześniej modele i
+zaimplementować metody we wcześniej stworzonych kontrolerach z zadania
+drugiego. Dodatkowo każda metoda CRUD powinna mieć odwołanie do
+widoku, np. formularza czy listy, poprawnioną mapę routingu jeżeli
+trzeba. Należy też dodać metody odpowiedzialne za część REST
+aplikacji, czyli implementację metod CRUD, które zwrócą dane z modelu
+w formie JSON.
+
