@@ -1,6 +1,6 @@
 package controllers
 
-class FilmTypeController {
+class MovieTypeController {
 
   def create = {}
 
