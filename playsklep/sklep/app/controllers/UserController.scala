@@ -1,12 +1,61 @@
 package controllers
 
-class UserController {
+import javax.inject.{Inject, Singleton}
+import models.{User}
+import play.api.data.Form
+import play.api.data.Forms._
+import play.api.mvc._
 
-  def getAll = {}
+import scala.concurrent.duration.Duration
+import scala.concurrent.{Await, ExecutionContext, Future}
 
-  def update(userId: String) = {}
+@Singleton
+class UserController @Inject()(userRepository: UserService, cc: MessagesControllerComponents)(implicit ec: ExecutionContext) extends MessagesAbstractController(cc) {
+  val createUserForm: Form[CreateUserForm] = Form {
+    mapping(
+      "firstName" -> nonEmptyText,
+      "surname" -> nonEmptyText,
+      "isAdmin" -> boolean
+    )(CreateUserForm.apply)(CreateUserForm.unapply)
+  }
 
-  def updateUserHandler(userId: String) = {}
+  def getAll: Action[AnyContent] : Action[AnyContent] = Action.async { implicit request: Request[_] =>
+    val users = userRepository.getAll();
+    users.map(user => Ok(views.html.user.users(user)))
+  }
 
-  def delete(userId: String) = {}
+  def delete(userId: String): Action[AnyContent] = Action.async { implicit request: Request[_] =>
+    userRepository.delete(userId).map(_ => Redirect(routes.UserController.getAll()).flashing("info" -> "Użytkownik usunięty"))
+  }
+
+  def update(userId: String) : Action[AnyContent] = Action.async { implicit request: Request[_] =>
+    val user: User = Await.result(userRepository.getById(userId), Duration.Inf).get
+    val isAdmin: Boolean = user.role == UserRoles.Admin
+    val updateForm = createUserForm.fill(CreateUserForm(user.firstName, user.surname, isAdmin))
+    Ok(views.html.user.update_user(userId, updateForm, isAdmin))
+  }
+
+  def updateUserHandler(userId: String): Action[AnyContent] = Action.async { implicit request: Request[_] =>
+    val errorFunction = { formWithErrors: Form[CreateUserForm] =>
+      Future.successful(Redirect(routes.UserController.update(userId)).flashing("error" -> "Błąd podczas edycji użytkownika"))
+    }
+
+    val successFunction = { user: CreateUserForm =>
+      val userEmail: String = Await.result(userRepository.getById(userId), Duration.Inf).get.email
+      var userRole: UserRoles.UserRole = UserRoles.User
+      if (user.isAdmin) {
+        userRole = UserRoles.Admin
+      }
+      userRepository.update(userId, user.firstName, user.surname, userEmail, userRole).map { _ =>
+        Redirect(routes.UserController.getAll()).flashing("success" -> "Użytkownik zmodyfikowany")
+      };
+    }
+    createUserForm.bindFromRequest.fold(errorFunction, successFunction)
+  }
+
 }
+
+case class CreateUserForm(firstName: String,
+                          surname: String,
+                          isAdmin: Boolean
+                         )

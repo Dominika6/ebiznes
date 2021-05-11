@@ -1,0 +1,150 @@
+package controllers.api
+
+import javax.inject.{Inject, Singleton}
+import models.{Order, Pay}
+import play.api.libs.json.{JsError, Json}
+import play.api.mvc._
+import models._
+
+import scala.concurrent.duration.Duration
+import scala.concurrent.{Await, ExecutionContext, Future}
+
+case class CreateOrder(pay: String,
+                       movies: Seq[String])
+
+object CreateOrder {
+  implicit val orderFormat = Json.format[CreateOrder]
+}
+
+case class UpdateOrder(user: Option[String],
+                       pay: Option[String],
+                       movies: Option[Seq[String]])
+
+object UpdateOrder {
+  implicit val orderFormat = Json.format[UpdateOrder]
+}
+
+@Singleton
+class OrderApiController @Inject()(orderRepository: OrderRepository,
+                                   movieRepository: MovieRepository,
+                                   userRepository: UserService,
+                                   payRepository: PayRepository,
+                                   cc: MessagesControllerComponents,
+                                   errorHandler: JsonErrorHandler
+                                  )(implicit ec: ExecutionContext) extends MessagesAbstractController(cc) {
+
+  val orderNotFound = NotFound(Json.obj("message" -> "Order does not exist"))
+
+  def getAll: Action[AnyContent] = Action.async { implicit request =>
+    val orders: Future[Seq[(Order, Pay, User, Double)]] = orderRepository.getAllWithPayAndUser()
+    orders.map(orders => {
+      val newOrder = orders.map {
+        case (o, p, u, v) => Json.obj("id" -> o.id, "pay" -> p, "user" -> u, "value" -> v)
+      }
+      Ok(Json.toJson(newOrder))
+    })
+  }
+
+  def get(id: String) : Action[AnyContent] = Action.async { implicit request =>
+    orderRepository.getByIdWithUserAndPay(id) map {
+      case Some(order) => {
+        val orderItems = Await.result(orderRepository.getOrderItemsWithMovie(id), Duration.Inf)
+        val orderItemsJson = orderItems.map {
+          case (oi, m) => Json.obj("price" -> oi.price, "movie" -> m)
+        }
+        val value: Double = Await.result(orderRepository.getOrderValue(id), Duration.Inf)
+        Ok(Json.obj("id" -> order._1.id, "pay" -> order._2, "user" -> order._3, "value" -> value, "items" -> orderItemsJson))
+      }
+      case None => orderNotFound
+    }
+  }
+
+  def create(): Action[AnyContent] = Action.async { request =>
+    val body = request.body
+
+    body.validate[CreateOrder].fold(
+      errors => {
+        Future.successful(BadRequest(Json.obj("message" -> JsError.toJson(errors))))
+      },
+      order => {
+        var invalidMovies: Seq[String] = Seq()
+        for (m <- order.movies) {
+          if (!(Await.result(movieRepository.isExist(m), Duration.Inf))) {
+            invalidMovies = invalidMovies :+ m
+          }
+        }
+        val isUserExist: Boolean = Await.result(userRepository.isExist(request.identity.id), Duration.Inf)
+        val isPayExist: Boolean = Await.result(payRepository.isExist(order.pay), Duration.Inf)
+
+        val valid: Boolean = invalidMovies.isEmpty && isUserExist && isPayExist
+        if (!valid) {
+          if (!isUserExist) {
+            Future.successful(BadRequest(Json.obj("message" -> "User does not exist")))
+          } else if (!isPayExist) {
+            Future.successful(BadRequest(Json.obj("message" -> "Pay does not exist")))
+          } else {
+            Future.successful(BadRequest(Json.obj("invalid_movies" -> invalidMovies)))
+          }
+        } else {
+          orderRepository.create(request.identity.id, order.pay, order.movies)
+          Future.successful(Ok(Json.obj("message" -> "Order created")))
+        }
+      }
+    )
+  }
+
+
+  def update(id: String) : Action[AnyContent] = Action.async { implicit request =>
+    orderRepository.getById(id) map {
+      case Some(o) => {
+        val body = request.body
+        body.validate[UpdateOrder].fold(
+          errors => {
+            BadRequest(Json.obj("message" -> JsError.toJson(errors)))
+          },
+          order => {
+            var invalidMovies: Seq[String] = Seq()
+            if (order.movies.nonEmpty) {
+              for (m <- order.movies.get) {
+                if (!(Await.result(movieRepository.isExist(m), Duration.Inf))) {
+                  invalidMovies = invalidMovies :+ m
+                }
+              }
+            }
+
+            val isUserExist: Boolean = Await.result(userRepository.isExist(order.user.getOrElse(o.user)), Duration.Inf)
+            val isPayExist: Boolean = Await.result(payRepository.isExist(order.pay.getOrElse(o.pay)), Duration.Inf)
+
+            val valid: Boolean = invalidMovies.isEmpty && isUserExist && isPayExist
+
+            if (!valid) {
+              if (!isUserExist) {
+                BadRequest(Json.obj("message" -> "User does not exist"))
+              } else if (!isPayExist) {
+                BadRequest(Json.obj("message" -> "Pay does not exist"))
+              } else {
+                BadRequest(Json.obj("invalid_movies" -> invalidMovies))
+              }
+            } else {
+              val currentMovies: Seq[String] = Await.result(orderRepository.getMoviesForOrder(id), Duration.Inf).map(_.id)
+
+              orderRepository.update(id, order.user.getOrElse(o.user), order.pay.getOrElse(o.pay), order.movies.getOrElse(currentMovies))
+              Ok(Json.obj("message" -> "Order updated"))
+            }
+          }
+        )
+      }
+      case None => orderNotFound
+    }
+  }
+
+  def delete(id: String) : Action[AnyContent] = Action.async { implicit request =>
+    orderRepository.getById(id) map {
+      case Some(o) => {
+        orderRepository.delete(id)
+        Ok(Json.obj("message" -> "Order deleted"))
+      }
+      case None => orderNotFound
+    }
+  }
+}

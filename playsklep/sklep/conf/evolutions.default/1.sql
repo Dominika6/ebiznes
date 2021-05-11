@@ -33,41 +33,41 @@ CREATE TABLE "movie" (
 );
 
 CREATE TABLE "movieAndActor" (
-                               "movieId" VARCHAR NOT NULL,
-                               "actorId" VARCHAR NOT NULL,
-                               PRIMARY KEY ("movieId", "actorId"),
-                               FOREIGN KEY ("movieId") REFERENCES movie("movieId") ON DELETE CASCADE,
-                               FOREIGN KEY ("actorId") REFERENCES actor("actorId") ON DELETE CASCADE
+                                 "movieId" VARCHAR NOT NULL,
+                                 "actorId" VARCHAR NOT NULL,
+                                 PRIMARY KEY ("movieId", "actorId"),
+                                 FOREIGN KEY ("movieId") REFERENCES movie("movieId") ON DELETE CASCADE,
+                                 FOREIGN KEY ("actorId") REFERENCES actor("actorId") ON DELETE CASCADE
 );
 
 CREATE TABLE "movieAndDirector" (
-                                  "movieId" VARCHAR NOT NULL,
-                                  "directorId" VARCHAR NOT NULL,
-                                  PRIMARY KEY ("movieId", "directorId"),
-                                  FOREIGN KEY ("movieId") REFERENCES movie("movieId") ON DELETE CASCADE,
-                                  FOREIGN KEY ("directorId") REFERENCES director("directorId") ON DELETE CASCADE
+                                    "movieId" VARCHAR NOT NULL,
+                                    "directorId" VARCHAR NOT NULL,
+                                    PRIMARY KEY ("movieId", "directorId"),
+                                    FOREIGN KEY ("movieId") REFERENCES movie("movieId") ON DELETE CASCADE,
+                                    FOREIGN KEY ("directorId") REFERENCES director("directorId") ON DELETE CASCADE
 );
 
 CREATE TABLE "movieAndType" (
-                               "movieId" VARCHAR NOT NULL,
-                               "typeId" VARCHAR NOT NULL,
-                               PRIMARY KEY ("movieId", "typeId"),
-                               FOREIGN KEY ("movieId") REFERENCES movie("movieId") ON DELETE CASCADE,
-                               FOREIGN KEY ("typeId") REFERENCES type("typeId") ON DELETE CASCADE
+                                "movieId" VARCHAR NOT NULL,
+                                "filmtypeId" VARCHAR NOT NULL,
+                                PRIMARY KEY ("movieId", "filmtypeId"),
+                                FOREIGN KEY ("movieId") REFERENCES movie("movieId") ON DELETE CASCADE,
+                                FOREIGN KEY ("filmtypeId") REFERENCES filmtype("filmtypeId") ON DELETE CASCADE
 );
 
 CREATE TABLE "movieToOrder" (
-                             "movieId" VARCHAR NOT NULL,
-                             "price" FLOAT NOT NULL,
-                             "orderId" VARCHAR NOT NULL,
-                             PRIMARY KEY ("orderId", "movieId"),
-                             FOREIGN KEY ("orderId") REFERENCES order("orderId") ON DELETE CASCADE,
-                             FOREIGN KEY ("movieId") REFERENCES movie("movieId") ON DELETE CASCADE
+                                "movieId" VARCHAR NOT NULL,
+                                "price" FLOAT NOT NULL,
+                                "orderId" VARCHAR NOT NULL,
+                                PRIMARY KEY ("orderId", "movieId"),
+                                FOREIGN KEY ("orderId") REFERENCES order("orderId") ON DELETE CASCADE,
+                                FOREIGN KEY ("movieId") REFERENCES movie("movieId") ON DELETE CASCADE
 );
 
-CREATE TABLE "type" (
-                             "typeId" VARCHAR NOT NULL PRIMARY KEY,
-                             "type" VARCHAR NOT NULL
+CREATE TABLE "filmtype" (
+                        "filmtypeId" VARCHAR NOT NULL PRIMARY KEY,
+                        "filmtype" VARCHAR NOT NULL
 );
 
 CREATE TABLE "order" (
@@ -79,17 +79,17 @@ CREATE TABLE "order" (
 );
 
 CREATE TABLE "pay" (
-                           "payId" VARCHAR NOT NULL PRIMARY KEY,
-                           "method" VARCHAR NOT NULL
+                       "payId" VARCHAR NOT NULL PRIMARY KEY,
+                       "method" VARCHAR NOT NULL
 );
 
 CREATE TABLE "rate" (
-                          "rateId" VARCHAR NOT NULL PRIMARY KEY ,
-                          "userId" VARCHAR NOT NULL,
-                          "movieId" VARCHAR NOT NULL,
-                          "result" INT NOT NULL,
-                          FOREIGN KEY ("userId") REFERENCES user("userId") ON DELETE CASCADE,
-                          FOREIGN KEY ("movieId") REFERENCES movie("movieId") ON DELETE CASCADE
+                        "rateId" VARCHAR NOT NULL PRIMARY KEY ,
+                        "userId" VARCHAR NOT NULL,
+                        "movieId" VARCHAR NOT NULL,
+                        "result" INT NOT NULL,
+                        FOREIGN KEY ("userId") REFERENCES user("userId") ON DELETE CASCADE,
+                        FOREIGN KEY ("movieId") REFERENCES movie("movieId") ON DELETE CASCADE
 );
 
 CREATE TABLE "user" (
@@ -119,8 +119,8 @@ INSERT INTO movieAndDirector VALUES ('2', '2');
 INSERT INTO movieAndType VALUES ('1', '1');
 INSERT INTO movieAndType VALUES ('2', '2');
 
-INSERT INTO type VALUES ('1', 'Type 1');
-INSERT INTO type VALUES ('2', 'Type 2');
+INSERT INTO filmtype VALUES ('1', 'Type 1');
+INSERT INTO filmtype VALUES ('2', 'Type 2');
 
 INSERT INTO payment VALUES ('1', 'Method 1');
 INSERT INTO payment VALUES ('2', 'Method 2');
@@ -137,7 +137,7 @@ DROP TABLE movieAndActor IF EXISTS;
 DROP TABLE movieAndDirector IF EXISTS;
 DROP TABLE movieAndType IF EXISTS;
 DROP TABLE movieToOrder IF EXISTS;
-DROP TABLE type IF EXISTS;
+DROP TABLE filmtype IF EXISTS;
 DROP TABLE [order] IF EXISTS;
 DROP TABLE pay IF EXISTS;
 DROP TABLE rate IF EXISTS;
