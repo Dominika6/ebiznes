@@ -1,0 +1,88 @@
+@(
+        id: String,
+        movie: Form[CreateMovieForm],
+        selectedActors: Seq[String],
+        actors: Seq[Actor],
+        selectedDirectors: Seq[String],
+        directors: Seq[Director],
+        selectedFilmtypes: Seq[String],
+        filmtypes: Seq[Filmtype]
+)(implicit request: Request[_], flash: Flash)
+
+@import views.html.bootstrap3._
+
+@main("Edycja filmu") {
+    <div class="col">
+        @alerts(flash)
+        @helper.form(controllers.routes.MovieController.updateMovieHandler(id)) {
+            @helper.CSRF.formField
+            @text(movie("title"), "Tytuł")
+            @textarea(movie("details"), "5", "Opis filmu")
+            @text(movie("publicationDate"), "Rok premiery")
+            @number(movie("price"), "Cena", step = "0.01")
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Reżyserzy</label>
+                <div class="col-sm-10">
+                    <select
+                    multiple
+                    class="form-control"
+                    id="directors[]"
+                    name="directors[]">
+                    @for(d <- directors) {
+                        @if(selectedDirectors.contains(d.directorId)) {
+                            <option selected id="@d.directorId" value="@d.directorId" >@d.firstName @d.surname</option>
+                        } else {
+                            <option id="@d.directorId" value="@d.directorId" >@d.firstName @d.surname</option>
+                        }
+
+                    }
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Aktorzy</label>
+                <div class="col-sm-10">
+                    <select
+                    multiple
+                    class="form-control"
+                    id="actors[]"
+                    name="actors[]">
+                    @for(a <- actors) {
+                        @if(selectedActors.contains(a.actorId)) {
+                            <option selected id="@a.actorId" value="@a.actorId" >@a.firstName @a.surname</option>
+                        } else {
+                            <option id="@a.actorId" value="@a.actorId" >@a.firstName @a.surname</option>
+                        }
+                    }
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Gatunki</label>
+                <div class="col-sm-10">
+                    <select
+                    multiple
+                    class="form-control"
+                    id="filmtypes[]"
+                    name="filmtypes[]">
+                    @for(g <- filmtypes) {
+                        @if(selectedFilmtypes.contains(g.filmtypeId)) {
+                            <option selected id="@g.filmtypeId" value="@g.filmtypeId" >@g.filmtype</option>
+                        } else {
+                            <option id="@g.filmtypeId" value="@g.filmtypeId" >@g.filmtype</option>
+                        }
+                    }
+                    </select>
+                </div>
+            </div>
+            @submit("Edytuj")
+        }
+    </div>
+
+}
+
+
+

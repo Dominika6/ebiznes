@@ -1,0 +1,29 @@
+@import models.Filmtype
+@import views.html.bootstrap3._
+
+@(filmtypes: Seq[Filmtype])(implicit flash: Flash)
+@main("Gatunki") {
+    @alerts(flash)
+    <table class="table" summary="Gatunki">
+        <thead>
+            <tr>
+                <th style="width: 5%" scope="col">#</th>
+                <th scope="col">Nazwa</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+        @for(filmtype <- filmtypes) {
+            <tr>
+                <th scope="row"><span class="badge badge-light">@filmtype.filmtypeId</span></th>
+                <td><a href="@controllers.routes.FilmtypeController.get(filmtype.filmtypeId)">@filmtype.filmtype</a></td>
+                <td class="text-right">
+                    <a class="btn btn-sm btn-outline-info" href="@controllers.routes.FilmtypeController.update(filmtype.filmtypeId)" role="button">Edytuj</a>
+                    <a class="btn btn-sm btn-outline-danger" href="@controllers.routes.FilmtypeController.delete(filmtype.filmtypeId)" role="button">Usuń</a>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+    <a href="@controllers.routes.FilmtypeController.create()" class="btn btn-light float-right" role="button" aria-pressed="true">Dodaj</a>
+}

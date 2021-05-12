@@ -1,0 +1,15 @@
+@import views.html.bootstrap3._
+
+@(user: Form[Login])(implicit request: MessagesRequestHeader, flash: Flash)
+@main("Zaloguj się", false) {
+    <div class="col">
+        @alerts(flash)
+        @helper.form(controllers.routes.AuthController.loginHandler()) {
+            @helper.CSRF.formField
+            @text(user("email"), "E-mail")
+            @password(user("password"), "Hasło")
+            @submit("Zaloguj się")
+        }
+    </div>
+
+}

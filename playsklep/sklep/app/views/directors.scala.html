@@ -1,0 +1,28 @@
+@import models.Director
+@import views.html.bootstrap3._
+@(directors: Seq[Director])(implicit flash: Flash)
+@main("Reżyserzy") {
+    @alerts(flash)
+    <table class="table" summary="Rezyserzy">
+        <thead>
+            <tr>
+                <th style="width: 5%" scope="col">#</th>
+                <th scope="col">Imie i nazwisko</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+        @for(director <- directors) {
+            <tr>
+                <th scope="row"><span class="badge badge-light">@director.directorId</span></th>
+                <td><a href="@controllers.routes.DirectorController.get(director.directorId)">@director.firstName @director.surname</a></td>
+                <td class="text-right">
+                    <a class="btn btn-sm btn-outline-info" href="@controllers.routes.DirectorController.update(director.directorId)" role="button">Edytuj</a>
+                    <a class="btn btn-sm btn-outline-danger" href="@controllers.routes.DirectorController.delete(director.directorId)" role="button">Usuń</a>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+    <a href="@controllers.routes.DirectorController.create()" class="btn btn-light float-right" role="button" aria-pressed="true">Dodaj</a>
+}

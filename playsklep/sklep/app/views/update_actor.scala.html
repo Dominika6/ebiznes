@@ -1,0 +1,18 @@
+@(actorId: String, actor: Form[CreateActorForm])(implicit request: Request[_], flash: Flash)
+
+@import views.html.bootstrap3._
+
+@main("Edycja aktora") {
+    <div class="col">
+        @alerts(flash)
+        @helper.form(controllers.routes.ActorController.updateActorHandler(actorId)) {
+            @helper.CSRF.formField
+            @text(actor("firstName"), "Imię")
+            @text(actor("surname"), "Nazwisko")
+            @submit("Edytuj")
+        }
+    </div>
+}
+
+
+

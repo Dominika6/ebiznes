@@ -1,0 +1,18 @@
+@(filmtype: Form[CreatePayForm])(implicit request: Request[_], flash: Flash)
+
+@import views.html.bootstrap3._
+
+@main("Dodaj typ płatności") {
+    <div class="col">
+        @alerts(flash)
+        @helper.form(controllers.routes.PayController.createPayHandler()) {
+            @helper.CSRF.formField
+            @text(filmtype("filmtype"), "Nazwa")
+            @submit()
+        }
+    </div>
+
+}
+
+
+

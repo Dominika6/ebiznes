@@ -1,0 +1,34 @@
+@import models.User
+@import views.html.bootstrap3._
+
+@(users: Seq[User])(implicit flash: Flash)
+
+@main("Użytkownicy") {
+    @alerts(flash)
+    <table class="table" summary="Uzytkownicy">
+        <thead>
+            <tr>
+                <th style="width: 10%" scope="col">#</th>
+                <th scope="col">Imie i nazwisko</th>
+                <th scope="col">E-mail</th>
+                <th scope="col">Typ</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+        @for(user <- users) {
+            <tr>
+                <th scope="row"><span class="badge badge-light">@user.userId</span></th>
+                <td>@user.firstName @user.surname</td>
+                <td>@user.email</td>
+                <td><span class="badge @if(user.role == "admin") {badge-primary} else {badge-secondary} text-uppercase">@user.role</span></td>
+                <td class="text-right">
+                    <a class="btn btn-sm btn-outline-info" href="@controllers.routes.UserController.update(user.userId)" role="button">Edytuj</a>
+                    <a class="btn btn-sm btn-outline-danger" href="@controllers.routes.UserController.delete(user.userId)" role="button">Usuń</a>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+@*    <a href="@controllers.routes.UserController.create()" class="btn btn-light float-right" role="button" aria-pressed="true">Dodaj</a>*@
+}

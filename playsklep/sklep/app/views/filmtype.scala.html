@@ -1,0 +1,32 @@
+@import models.Filmtype
+@(filmtype: Filmtype, movies: Seq[Movie])
+@main(filmtype.filmtype) {
+    <table class="table" summary="Filmy z gatunku">
+        <thead>
+            <tr>
+                <th style="width: 5%" scope="col">#</th>
+                <th scope="col">Tytul</th>
+                <th scope="col">Opis</th>
+                <th scope="col">Cena</th>
+                <th scope="col">Rok produkcji</th>
+            </tr>
+        </thead>
+        <tbody>
+        @for(movie <- movies) {
+            <tr>
+                <th scope="row">@movie.movieId</th>
+                <td><a href="@controllers.routes.MovieController.get(movie.movieId)">@movie.title</a></td>
+                <td>@(movie.details.substring(0, 64))...</td>
+                <td>@movie.price zł</td>
+                <td>@movie.publicationDate</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+
+    <div class="col-12 mt-5 border-top pt-3">
+        <a href="@controllers.routes.FilmtypeController.getAll()" class="btn btn-outline-dark btn-sm" role="button" aria-disabled="true">
+            Lista gatunków</a>
+    </div>
+}
+

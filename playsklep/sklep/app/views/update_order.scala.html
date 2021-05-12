@@ -1,0 +1,74 @@
+@import models.User
+@(id: String, order: Form[CreateOrderForm], users: Seq[User], pays: Seq[Pay], selectedMovies: Seq[String], movies: Seq[Movie])(implicit request: Request[_], flash: Flash)
+
+@import views.html.bootstrap3._
+
+@main("Edycja zamówienia") {
+    <div class="col">
+        @alerts(flash)
+        @helper.form(controllers.routes.OrderController.updateOrderHandler(id)) {
+            @helper.CSRF.formField
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Użytkownik</label>
+                <div class="col-sm-10">
+                    <select
+                    class="form-control"
+                    id="user"
+                    name="user">
+                    @for(u <- users) {
+                        @if(u.userId == order("user").value.getOrElse("")) {
+                            <option selected id="@u.userId" value="@u.userId" >@u.firstName @u.surname</option>
+                        } else {
+                            <option id="@u.userId" value="@u.userId" >@u.firstName @u.surname</option>
+                        }
+                    }
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Filmy</label>
+                <div class="col-sm-10">
+                    <select
+                    multiple
+                    class="form-control"
+                    id="movies[]"
+                    name="movies[]">
+                    @for(m <- movies) {
+                        @if(selectedMovies.contains(m.movieId)) {
+                            <option selected id="@m.movieId" value="@m.movieId" >@m.title</option>
+                        } else {
+                            <option id="@m.movieId" value="@m.movieId" >@m.title</option>
+                        }
+
+                    }
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Typ płatności</label>
+                <div class="col-sm-10">
+                    <select
+                    class="form-control"
+                    id="pay"
+                    name="pay">
+                    @for(p <- pays) {
+                        @if(p.payId == order("pay").value.getOrElse("")) {
+                            <option selected id="@p.payId" value="@p.payId" >@p.method</option>
+                        } else {
+                            <option id="@p.payId" value="@p.payId" >@p.method</option>
+                        }
+
+                    }
+                    </select>
+                </div>
+            </div>
+            @submit("Edytuj")
+        }
+    </div>
+
+}
+
+
+

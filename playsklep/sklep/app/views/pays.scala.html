@@ -1,0 +1,29 @@
+@import models.Pay
+@import views.html.bootstrap3._
+
+@(pays: Seq[Pay])(implicit flash: Flash)
+@main("Płatności") {
+    @alerts(flash)
+    <table class="table" summary="Platnosci">
+        <thead>
+            <tr>
+                <th style="width: 5%" scope="col">#</th>
+                <th scope="col">Nazwa</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+        @for(pay <- pays) {
+            <tr>
+                <th scope="row"><span class="badge badge-light">@pay.payId</span></th>
+                <td>@pay.method</td>
+                <td class="text-right">
+                    <a class="btn btn-sm btn-outline-info" href="@controllers.routes.PayController.update(pay.payId)" role="button">Edytuj</a>
+                    <a class="btn btn-sm btn-outline-danger" href="@controllers.routes.PayController.delete(pay.payId)" role="button">Usuń</a>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+    <a href="@controllers.routes.PayController.create()" class="btn btn-light float-right" role="button" aria-pressed="true">Dodaj</a>
+}

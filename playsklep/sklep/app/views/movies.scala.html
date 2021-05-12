@@ -1,0 +1,33 @@
+@import models.Movie
+@import views.html.bootstrap3._
+
+@(movies: Seq[Movie])(implicit flash: Flash)
+@main("Filmy") {
+    @alerts(flash)
+    <table class="table" summary="Filmy">
+        <thead>
+            <tr>
+                <th style="width: 5%" scope="col">#</th>
+                <th scope="col">Tytul</th>
+                <th scope="col">Cena</th>
+                <th scope="col">Rok produkcji</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+        @for(movie <- movies) {
+            <tr>
+                <th scope="row"><span class="badge badge-light">@movie.movieId</span></th>
+                <td><a href="@controllers.routes.MovieController.get(movie.movieId)">@movie.title</a></td>
+                <td>@movie.price zł</td>
+                <td>@movie.publicationDate</td>
+                <td class="text-right">
+                    <a class="btn btn-sm btn-outline-info" href="@controllers.routes.MovieController.update(movie.movieId)" role="button">Edytuj</a>
+                    <a class="btn btn-sm btn-outline-danger" href="@controllers.routes.MovieController.delete(movie.movieId)" role="button">Usuń</a>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+    <a href="@controllers.routes.MovieController.create()" class="btn btn-light float-right" role="button" aria-pressed="true">Dodaj</a>
+}

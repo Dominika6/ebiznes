@@ -1,0 +1,28 @@
+@import models.Actor
+@import views.html.bootstrap3._
+
+@(actors: Seq[Actor])(implicit flash: Flash)
+@main("Aktorzy") {
+    @alerts(flash)
+    <table class="table" summary="Aktorzy">
+        <thead>
+            <tr>
+                <th style="width: 5%" scope="col">#</th>
+                <th scope="col">Imie i nazwisko</th>
+            </tr>
+        </thead>
+        <tbody>
+        @for(actor <- actors) {
+            <tr>
+                <th scope="row"><span class="badge badge-light">@actor.actorId</span></th>
+                <td><a href="@controllers.routes.ActorController.get(actor.actorId)">@actor.firstName @actor.surname</a></td>
+                <td class="text-right">
+                    <a class="btn btn-sm btn-outline-info" href="@controllers.routes.ActorController.update(actor.actorId)" role="button">Edytuj</a>
+                    <a class="btn btn-sm btn-outline-danger" href="@controllers.routes.ActorController.delete(actor.actorId)" role="button">Usuń</a>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+    <a href="@controllers.routes.ActorController.create()" class="btn btn-light float-right" role="button" aria-pressed="true">Dodaj</a>
+}

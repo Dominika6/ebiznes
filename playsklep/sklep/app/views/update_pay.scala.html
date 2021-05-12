@@ -1,0 +1,18 @@
+@(id: String, filmtype: Form[CreatePayForm])(implicit request: Request[_], flash: Flash)
+
+@import views.html.bootstrap3._
+
+@main("Edycja typu płatności") {
+    <div class="col">
+        @alerts(flash)
+        @helper.form(controllers.routes.PayController.updatePayHandler(id)) {
+            @helper.CSRF.formField
+            @text(filmtype("filmtype"), "Nazwa")
+            @submit("Edytuj")
+        }
+    </div>
+
+}
+
+
+

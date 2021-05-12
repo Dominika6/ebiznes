@@ -1,0 +1,55 @@
+@import models.User
+@(id: String, rate: Form[CreateRateForm], users: Seq[User], movies: Seq[Movie])(implicit request: Request[_], flash: Flash)
+
+@import views.html.bootstrap3._
+
+@main("Edycja oceny") {
+    <div class="col">
+        @alerts(flash)
+        @helper.form(controllers.routes.RateController.updateRateHandler(id)) {
+            @helper.CSRF.formField
+            @number(rate("result"), "Ocena")
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Użytkownik</label>
+                <div class="col-sm-10">
+                    <select
+                    class="form-control"
+                    id="userId"
+                    name="userId">
+                    @for(u <- users) {
+                        @if(u.userId == rate("userId").result.getOrElse("")) {
+                            <option selected id="@u.userId" value="@u.userId" >@u.firstName @u.surname</option>
+                        } else {
+                            <option id="@u.userId" value="@u.userId" >@u.firstName @u.surname</option>
+                        }
+                    }
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Film</label>
+                <div class="col-sm-10">
+                    <select
+                    class="form-control"
+                    id="movieId"
+                    name="movieId">
+                    @for(m <- movies) {
+                        @if(m.movieId == rate("movieId").result.getOrElse("")) {
+                            <option selected id="@m.movieId" value="@m.movieId" >@m.title</option>
+                        } else {
+                            <option id="@m.movieId" value="@m.movieId" >@m.title</option>
+                        }
+                    }
+                    </select>
+                </div>
+            </div>
+            @submit("Edytuj")
+        }
+    </div>
+
+}
+
+
+

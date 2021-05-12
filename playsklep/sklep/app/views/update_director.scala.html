@@ -1,0 +1,19 @@
+@(directorId: String, director: Form[CreateDirectorForm])(implicit request: Request[_], flash: Flash)
+
+@import views.html.bootstrap3._
+
+@main("Edycja reżysera") {
+    <div class="col">
+        @alerts(flash)
+        @helper.form(controllers.routes.DirectorController.updateDirectorHandler(directorId)) {
+            @helper.CSRF.formField
+            @text(director("firstName"), "Imię")
+            @text(director("surname"), "Nazwisko")
+            @submit("Edytuj")
+        }
+    </div>
+
+}
+
+
+

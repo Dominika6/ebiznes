@@ -1,0 +1,67 @@
+@(movie: Form[CreateMovieForm], actors: Seq[Actor], directors: Seq[Director], filmtypes: Seq[Filmtype])(implicit request: Request[_], flash: Flash)
+
+
+@import views.html.bootstrap3._
+
+@main("Dodaj film") {
+    <div class="col">
+        @alerts(flash)
+        @helper.form(controllers.routes.MovieController.createMovieHandler()) {
+            @helper.CSRF.formField
+            @text(movie("title"), "Tytuł")
+            @textarea(movie("details"), "5", "Opis filmu")
+            @text(movie("publicationDate"), "Rok premiery")
+            @number(movie("price"), "Cena", step = "0.01")
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Reżyserzy</label>
+                <div class="col-sm-10">
+                    <select
+                    multiple
+                    class="form-control"
+                    id="directors[]"
+                    name="directors[]">
+                    @for(d <- directors) {
+                        <option id="@d.directorId" value="@d.directorId" >@d.firstName @d.surname</option>
+                    }
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Aktorzy</label>
+                <div class="col-sm-10">
+                    <select
+                    multiple
+                    class="form-control"
+                    id="actors[]"
+                    name="actors[]">
+                    @for(a <- actors) {
+                        <option id="@a.actorId" value="@a.actorId" >@a.firstName @a.surname</option>
+                    }
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Gatunki</label>
+                <div class="col-sm-10">
+                    <select
+                    multiple
+                    class="form-control"
+                    id="filmtypes[]"
+                    name="filmtypes[]">
+                    @for(t <- filmtypes) {
+                        <option id="@t.filmtypeId" value="@t.filmtypeId" >@t.filmtype</option>
+                    }
+                    </select>
+                </div>
+            </div>
+            @submit()
+        }
+    </div>
+
+}
+
+
+
