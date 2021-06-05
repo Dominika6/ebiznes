@@ -44,3 +44,35 @@ widoku, np. formularza czy listy, poprawnioną mapę routingu jeżeli
 trzeba. Należy też dodać metody odpowiedzialne za część REST
 aplikacji, czyli implementację metod CRUD, które zwrócą dane z modelu
 w formie JSON.
+
+
+## Zadanie 5. React
+
+Kolejne zadanie dotyczy biblioteki React.js. Należy stworzyć
+komponenty odpowiadające funkcjonalności użytkownika, tzn. nie musi
+być 1:1 do kontrolerów w Play. Należy stworzyć minimum 8 komponentów,
+a ewentualne zapytania do serwera należy wydzielić do zewnętrznej
+klasy i/lub serwisu.
+
+## Zdanie 6. React hooks
+
+Należy wykorzystać React hooks, aby udostępnić dane np. produkty
+pomiędzy komponentami. Należy wykorzystać je tam, gdzie dane z serwera
+sa wykorzystywane. Alternatywa: mobx, redux.
+
+## Zadanie 7. Oauth2
+
+Zaimplementować oauth2 po stronie serwera z przekazaniem tokena
+(nowego) do Reacta. Należy dodać dwa serwisy, np. Google lub Facebook.
+
+## Zadanie 8. Chmura
+
+Proszę wykorzystać Azure i zrobić deployment aplikacji za pomoca
+GitHub Actions. Należy zrobić deployment aplikacji serwerowej i
+klienckiej (frotend).
+
+## Zadanie 9. Sonar
+
+Należy usunać wszystkie code smells, bugi, oraz security hotspots w
+kodzie.
+
