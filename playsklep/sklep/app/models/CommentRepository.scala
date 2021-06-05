@@ -1,37 +1,23 @@
 package models
-
+import models.auth.{User, UserTable}
 import java.util.UUID
 import javax.inject.{Inject, Singleton}
 import play.api.db.slick.DatabaseConfigProvider
 import slick.jdbc.JdbcProfile
 import scala.concurrent.{ExecutionContext, Future}
 
-
 @Singleton
-class CommentRepository @Inject()(dbConfigProvider: DatabaseConfigProvider, userRepository: UserRepository, movieRepository: MovieRepository)(implicit ec: ExecutionContext) {
+class CommentRepository @Inject()(dbConfigProvider: DatabaseConfigProvider, userRepo: User, movieRepository: MovieRepository)(implicit ec: ExecutionContext) {
   val dbConfig = dbConfigProvider.get[JdbcProfile]
 
   import dbConfig._
   import profile.api._
 
-  class CommentTable(tag: Tag) extends Table[Comment](tag, "comment") {
-    val user = TableQuery[userRepository.UserTable]
-    val movie = TableQuery[movieRepository.MovieTable]
-
-    def commentId = column[String]("commentId", O.PrimaryKey)
-    def comment = column[String]("comment")
-    def userId = column[String]("userId")
-    def movieId = column[String]("movieId")
-    def userId_fk = foreignKey("user_fk", userId, user)(_.userId, onUpdate = ForeignKeyAction.NoAction , onDelete = ForeignKeyAction.Cascade)
-    def movieId_fk = foreignKey("movieId_fk", movieId, movie)(_.movieId, onUpdate = ForeignKeyAction.NoAction , onDelete = ForeignKeyAction.Cascade)
-    def * = (commentId, comment, userId, movieId) <> ((Comment.apply _).tupled, Comment.unapply)
-  }
-
   val tableComment = TableQuery[CommentTable]
-  val user = TableQuery[userRepository.UserTable]
-  val movie = TableQuery[movieRepository.MovieTable]
+  val user = TableQuery[UserTable]
+  val movie = TableQuery[MovieTable]
 
-  def create(comment: String, userId: String, movieId: String): Future[Nothing] = db.run {
+  def create(comment: String, userId: String, movieId: String) = db.run {
     val commentId: String = UUID.randomUUID().toString
     tableComment.insertOrUpdate(Comment(commentId, comment, userId, movieId))
   }
@@ -52,8 +38,21 @@ class CommentRepository @Inject()(dbConfigProvider: DatabaseConfigProvider, user
     tableComment.filter(_.commentId === commentId).delete
   }
 
-  def update(commentId: String, comment: String, userId: String, movieId: String): Future[Nothing] = db.run {
+  def update(commentId: String, comment: String, userId: String, movieId: String) = db.run {
     tableComment.filter(_.commentId === commentId).update(Comment(commentId, comment, userId, movieId))
+  }
+
+
+  def getByIdWithMovieAndUser(commentId: String): Future[Option[(Comment, Movie, User)]] = db.run {
+    tableComment.filter(_.commentId === commentId).join(movie).on(_.movieId === _.movieId).join(user).on(_._1.userId === _.userId).map {
+      case ((comment, movie), user) => (comment, movie, user)
+    }.result.headOption
+  }
+
+  def getAllWithMovieAndUser: Future[Seq[(Comment, Movie, User)]] = db.run {
+    tableComment.join(movie).on(_.movieId === _.movieId).join(user).on(_._1.userId === _.userId).map {
+      case ((comment, movie), user) => (comment, movie, user)
+    }.result
   }
 
 }

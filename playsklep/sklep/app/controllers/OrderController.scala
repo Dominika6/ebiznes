@@ -1,11 +1,13 @@
 package controllers
-
+import com.mohiva.play.silhouette.api.Silhouette
 import javax.inject.{Inject, Singleton}
 import models._
+import models.auth.{User, UserRoles}
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.mvc._
-
+import repoauth.UserService
+import utils.auth.{CookieEnv, RoleCookieAuthorization}
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, ExecutionContext, Future}
 
@@ -15,7 +17,8 @@ class OrderController @Inject()(
                                  movieRepository: MovieRepository,
                                  userRepository: UserService,
                                  payRepository: PayRepository,
-                                 cc: MessagesControllerComponents)(implicit ec: ExecutionContext) extends MessagesAbstractController(cc) {
+                                 cc: MessagesControllerComponents,
+                                 silhouette: Silhouette[CookieEnv])(implicit ec: ExecutionContext) extends MessagesAbstractController(cc) {
 
   val createOrderForm: Form[CreateOrderForm] = Form {
     mapping(
@@ -25,29 +28,29 @@ class OrderController @Inject()(
     )(CreateOrderForm.apply)(CreateOrderForm.unapply)
   }
 
-  def getAll() : Action[AnyContent] = Action.async { implicit request: Request[_]  =>
-    val orders = orderRepository.getAllWithPayAndUser()
-    orders.map(order => Ok(views.html.order.orders(order)))
+  def getAll: Action[AnyContent] = silhouette.SecuredAction(RoleCookieAuthorization(UserRoles.Admin)).async { implicit request: Request[_]  =>
+    val orders = orderRepository.getAllWithPayAndUser
+    orders.map(order => Ok(views.html.orders(order)))
   }
 
-  def get(orderId: String) : Action[AnyContent] = Action.async { implicit request: Request[_]  =>
-    val orderItems: Seq[(OrderItem, Movie)] = Await.result(orderRepository.getOrderItemsWithMovie(orderId), Duration.Inf)
+  def get(orderId: String): Action[AnyContent] = silhouette.SecuredAction(RoleCookieAuthorization(UserRoles.Admin)).async { implicit request: Request[_]  =>
+    val orderItems: Seq[(MovieToOrder, Movie)] = Await.result(orderRepository.getOrderItemsWithMovie(orderId), Duration.Inf)
     val value: Double = Await.result(orderRepository.getOrderValue(orderId), Duration.Inf)
 
     orderRepository.getByIdWithUserAndPay(orderId) map {
-      case Some(o) => Ok(views.html.order.order(o, orderItems, value))
+      case Some(o) => Ok(views.html.order(o, orderItems, value))
       case None => Redirect(routes.OrderController.getAll())
     }
   }
 
-  def create : Action[AnyContent] = Action.async { implicit request: Request[_] =>
+  def create: Action[AnyContent] = silhouette.SecuredAction(RoleCookieAuthorization(UserRoles.Admin)) { implicit request: Request[_] =>
     val users: Seq[User] = Await.result(userRepository.getAll(), Duration.Inf)
-    val pays: Seq[Pay] = Await.result(payRepository.getAll(), Duration.Inf)
-    val movies: Seq[Movie] = Await.result(movieRepository.getAll(), Duration.Inf)
-    Ok(views.html.order.add_order(createOrderForm, users, pays, movies))
+    val pays: Seq[Pay] = Await.result(payRepository.getAll, Duration.Inf)
+    val movies: Seq[Movie] = Await.result(movieRepository.getAll, Duration.Inf)
+    Ok(views.html.add_order(createOrderForm, users, pays, movies))
   }
 
-  def createOrderHandler: Action[AnyContent] Action.async { implicit request: Request[_]  =>
+  def createOrderHandler: Action[AnyContent] = silhouette.SecuredAction(RoleCookieAuthorization(UserRoles.Admin)).async { implicit request: Request[_]  =>
     val errorFunction = { formWithErrors: Form[CreateOrderForm] =>
       Future {
         Redirect(routes.OrderController.create()).flashing("error" -> "Błąd podczas składania zamówienia")
@@ -63,21 +66,21 @@ class OrderController @Inject()(
   }
 
 
-  def update(orderId: String): Action[AnyContent] = Action.async { implicit request: Request[_]  =>
+  def update(orderId: String): Action[AnyContent] = silhouette.SecuredAction(RoleCookieAuthorization(UserRoles.Admin)) { implicit request: Request[_]  =>
     val order: Order = Await.result(orderRepository.getById(orderId), Duration.Inf).get
 
     val users: Seq[User] = Await.result(userRepository.getAll(), Duration.Inf)
-    val pays: Seq[Pay] = Await.result(payRepository.getAll(), Duration.Inf)
+    val pays: Seq[Pay] = Await.result(payRepository.getAll, Duration.Inf)
 
-    val movies: Seq[Movie] = Await.result(movieRepository.getAll(), Duration.Inf)
-    val selectedMovies: Seq[String] = Await.result(orderRepository.getMoviesForOrder(orderId), Duration.Inf).map(_.id)
+    val movies: Seq[Movie] = Await.result(movieRepository.getAll, Duration.Inf)
+    val selectedMovies: Seq[String] = Await.result(orderRepository.getMoviesForOrder(orderId), Duration.Inf).map(_.movieId)
 
-    val updateForm = createOrderForm.fill(CreateOrderForm(order.user, order.pay, selectedMovies))
+    val updateForm = createOrderForm.fill(CreateOrderForm(order.userId, order.payId, selectedMovies))
 
-    Ok(views.html.order.update_order(orderId, updateForm, users, pays, selectedMovies, movies))
+    Ok(views.html.update_order(orderId, updateForm, users, pays, selectedMovies, movies))
   }
 
-  def updateOrderHandler(orderId: String): Action[AnyContent] = Action.async { implicit request: Request[_]  =>
+  def updateOrderHandler(orderId: String): Action[AnyContent] = silhouette.SecuredAction(RoleCookieAuthorization(UserRoles.Admin)).async { implicit request: Request[_]  =>
     val errorFunction = { formWithErrors: Form[CreateOrderForm] =>
       Future {
         Redirect(routes.OrderController.update(orderId)).flashing("error" -> "Błąd podczas edycji zamówienia")
@@ -92,7 +95,7 @@ class OrderController @Inject()(
     createOrderForm.bindFromRequest.fold(errorFunction, successFunction)
   }
 
-  def delete(orderId: String) : Action[AnyContent] = Action.async { implicit request: Request[_]  =>
+  def delete(orderId: String): Action[AnyContent] = silhouette.SecuredAction(RoleCookieAuthorization(UserRoles.Admin)).async { implicit request: Request[_]  =>
     orderRepository.delete(orderId).map(_ => Redirect(routes.OrderController.getAll()).flashing("info" -> "Zamówienie usunięte"))
   }
 }

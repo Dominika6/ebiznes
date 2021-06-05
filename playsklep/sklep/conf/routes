@@ -9,9 +9,10 @@ GET     /                           controllers.HomeController.index()
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
 
-
+#+nocsrf
 GET         /auth/registration              controllers.AuthController.registration
 POST        /auth/registrationHandler       controllers.AuthController.registrationHandler
+#+nocsrf
 GET         /auth/login                     controllers.AuthController.login
 POST        /auth/loginHandler              controllers.AuthController.loginHandler
 GET         /auth/logout                    controllers.AuthController.logout
@@ -23,21 +24,21 @@ GET         /update/comments/:commentId     controllers.CommentController.update
 POST        /updateCommentHandler           controllers.CommentController.updateCommentHandler(commentId: String)
 GET         /delete/comments/:commentId     controllers.CommentController.delete(commentId: String)
 
-GET         /add/filmType                   controllers.MovieTypeController.create
-POST        /createTypeHandler              controllers.MovieTypeController.createTypeHandler
-GET         /filmType/:typeId               controllers.MovieTypeController.get(typeId: String)
-GET         /filmType                       controllers.MovieTypeController.getAll
-GET         /update/filmType/:typeId        controllers.MovieTypeController.update(typeId: String)
-POST        /updateTypeHandler              controllers.MovieTypeController.updateTypeHandler(typeId: String)
-GET         /delete/filmType/:typeId        controllers.MovieTypeController.delete(typeId: String)
+GET         /add/filmType                   controllers.FilmtypeController.create
+POST        /createTypeHandler              controllers.FilmtypeController.createFilmtypeHandler
+GET         /filmType/:typeId               controllers.FilmtypeController.get(typeId: String)
+GET         /filmType                       controllers.FilmtypeController.getAll
+GET         /update/filmType/:typeId        controllers.FilmtypeController.update(typeId: String)
+POST        /updateTypeHandler              controllers.FilmtypeController.updateFilmtypeHandler(typeId: String)
+GET         /delete/filmType/:typeId        controllers.FilmtypeController.delete(typeId: String)
 
-GET         /add/actor                      controllers.MainActorController.create
-POST        /createActorHandler             controllers.MainActorController.createActorHandler
-GET         /actor/:actorId                 controllers.MainActorController.get(actorId: String)
-GET         /actor                          controllers.MainActorController.getAll
-GET         /update/actor/:actorId          controllers.MainActorController.update(actorId: String)
-POST        /updateActorHandler             controllers.MainActorController.updateActorHandler(actorId: String)
-GET         /delete/actor/:actorId          controllers.MainActorController.delete(actorId: String)
+GET         /add/actor                      controllers.ActorController.create
+POST        /createActorHandler             controllers.ActorController.createActorHandler
+GET         /actor/:actorId                 controllers.ActorController.get(actorId: String)
+GET         /actor                          controllers.ActorController.getAll
+GET         /update/actor/:actorId          controllers.ActorController.update(actorId: String)
+POST        /updateActorHandler             controllers.ActorController.updateActorHandler(actorId: String)
+GET         /delete/actor/:actorId          controllers.ActorController.delete(actorId: String)
 
 GET         /add/movies                     controllers.MovieController.create
 POST        /createMovieHandler             controllers.MovieController.createMovieHandler
@@ -47,13 +48,13 @@ GET         /update/movies/:movieId         controllers.MovieController.update(m
 POST        /updateMovieHandler             controllers.MovieController.updateMovieHandler(movieId: String)
 GET         /delete/movies/:movieId         controllers.MovieController.delete(movieId: String)
 
-GET         /directors                      controllers.MovieDirectorController.getAll
-GET         /directors/:directorId          controllers.MovieDirectorController.get(directorId: String)
-GET         /add/directors                  controllers.MovieDirectorController.create
-GET         /delete/directors/:directorId   controllers.MovieDirectorController.delete(directorId: String)
-GET         /update/directors/:directorId   controllers.MovieDirectorController.update(directorId: String)
-POST        /createDirectorHandler          controllers.MovieDirectorController.createDirectorHandler
-POST        /updateDirectorHandler          controllers.MovieDirectorController.updateDirectorHandler(directorId: String)
+GET         /directors                      controllers.DirectorController.getAll
+GET         /directors/:directorId          controllers.DirectorController.get(directorId: String)
+GET         /add/directors                  controllers.DirectorController.create
+GET         /delete/directors/:directorId   controllers.DirectorController.delete(directorId: String)
+GET         /update/directors/:directorId   controllers.DirectorController.update(directorId: String)
+POST        /createDirectorHandler          controllers.DirectorController.createDirectorHandler
+POST        /updateDirectorHandler          controllers.DirectorController.updateDirectorHandler(directorId: String)
 
 GET         /add/orders                     controllers.OrderController.create
 POST        /createOrderHandler             controllers.OrderController.createOrderHandler
@@ -64,10 +65,10 @@ POST        /updateOrderHandler             controllers.OrderController.updateOr
 GET         /delete/orders/:orderId         controllers.OrderController.delete(orderId: String)
 
 GET         /add/payments                   controllers.PayController.create
-POST        /createPaymentHandler           controllers.PayController.createPaymentHandler
+POST        /createPaymentHandler           controllers.PayController.createPayHandler
 GET         /payments                       controllers.PayController.getAll
 GET         /update/payment/:paymentId      controllers.PayController.update(paymentId: String)
-POST        /updatePaymentHandler           controllers.PayController.updatePaymentHandler(paymentId: String)
+POST        /updatePaymentHandler           controllers.PayController.updatePayHandler(paymentId: String)
 GET         /delete/payment/:paymentId      controllers.PayController.delete(paymentId: String)
 
 GET         /add/rate                       controllers.RateController.create
@@ -82,4 +83,77 @@ GET         /user                           controllers.UserController.getAll
 GET         /update/user/:userId            controllers.UserController.update(userId: String)
 POST        /updateUserHandler              controllers.UserController.updateUserHandler(userId: String)
 GET         /delete/user/:userId            controllers.UserController.delete(userId: String)
+
+
+
+#api
+
++nocsrf
+POST        /api/auth/registration          controllers.api.AuthApiController.registration
++nocsrf
+POST        /api/auth/login                 controllers.api.AuthApiController.login
++nocsrf
+GET         /api/auth/social/:provider      controllers.api.AuthApiController.socialAuth(provider)
+GET         /api/auth/me                    controllers.api.AuthApiController.me
+
+GET         /api/user/movies                controllers.api.UserApiController.getMovies
+GET         /api/user/orders                controllers.api.UserApiController.getOrders
+POST        /api/user/edit                  controllers.api.UserApiController.updateUser
+
+GET         /api/actors                     controllers.api.ActorApiController.getAll
+GET         /api/actors/:actorId            controllers.api.ActorApiController.get(actorId: String)
+GET         /api/actors/:actorId/movies     controllers.api.ActorApiController.getMovies(actorId: String)
+POST        /api/actors                     controllers.api.ActorApiController.create
+PUT         /api/actors/:actorId            controllers.api.ActorApiController.update(actorId: String)
+DELETE      /api/actors/:actorId            controllers.api.ActorApiController.delete(actorId: String)
+
+GET         /api/directors                  controllers.api.DirectorApiController.getAll
+GET         /api/directors/:directorId      controllers.api.DirectorApiController.get(directorId: String)
+GET         /api/directors/:directorId/movies controllers.api.DirectorApiController.getMovies(directorId: String)
+POST        /api/directors                  controllers.api.DirectorApiController.create
+PUT         /api/directors/:directorId      controllers.api.DirectorApiController.update(directorId: String)
+DELETE      /api/directors/:directorId      controllers.api.DirectorApiController.delete(directorId: String)
+
+GET         /api/filmtypes                  controllers.api.FilmtypeApiController.getAll
+GET         /api/filmtypes/:filmtypeId/movies controllers.api.FilmtypeApiController.getMovies(filmtypeId: String)
+GET         /api/filmtypes/:filmtypeId      controllers.api.FilmtypeApiController.get(filmtypeId: String)
+POST        /api/filmtypes                  controllers.api.FilmtypeApiController.create
+PUT         /api/filmtypes/:filmtypeId      controllers.api.FilmtypeApiController.update(filmtypeId: String)
+DELETE      /api/filmtypes/:filmtypeId      controllers.api.FilmtypeApiController.delete(filmtypeId: String)
+
+GET         /api/pays                       controllers.api.PayApiController.getAll
+GET         /api/pays/:payId                controllers.api.PayApiController.get(payId: String)
+POST        /api/pays                       controllers.api.PayApiController.create
+PUT         /api/pays/:payId                controllers.api.PayApiController.update(payId: String)
+DELETE      /api/pays/:payId                controllers.api.PayApiController.delete(payId: String)
+
+GET         /api/comments                   controllers.api.CommentApiController.getAll
+GET         /api/comments/:commentId        controllers.api.CommentApiController.get(commentId: String)
+POST        /api/comments                   controllers.api.CommentApiController.create
+PUT         /api/comments/:commentId        controllers.api.CommentApiController.update(commentId: String)
+DELETE      /api/comments/:commentId        controllers.api.CommentApiController.delete(commentId: String)
+
+GET         /api/rates                      controllers.api.RateApiController.getAll
+GET         /api/rates/:rateId              controllers.api.RateApiController.get(rateId: String)
+POST        /api/rates                      controllers.api.RateApiController.create
+DELETE      /api/rates/:rateId              controllers.api.RateApiController.delete(rateId: String)
+
+GET         /api/movies                     controllers.api.MovieApiController.getAll
+GET         /api/movies/:movieId            controllers.api.MovieApiController.get(movieId: String)
+GET         /api/movies/:movieId/actors     controllers.api.MovieApiController.getActors(movieId: String)
+GET         /api/movies/:movieId/directors  controllers.api.MovieApiController.getDirectors(movieId: String)
+GET         /api/movies/:movieId/filmtypes  controllers.api.MovieApiController.getFilmtypes(movieId: String)
+GET         /api/movies/:movieId/comments   controllers.api.MovieApiController.getComments(movieId: String)
+GET         /api/movies/:movieId/rates      controllers.api.MovieApiController.getRates(movieId: String)
+POST        /api/movies                     controllers.api.MovieApiController.create
+PUT         /api/movies/:movieId            controllers.api.MovieApiController.update(movieId: String)
+DELETE      /api/movies/:movieId            controllers.api.MovieApiController.delete(movieId: String)
+
+GET         /api/orders                    controllers.api.OrderApiController.getAll
+GET         /api/orders/:orderId           controllers.api.OrderApiController.get(orderId: String)
+POST        /api/orders                    controllers.api.OrderApiController.create
+PUT         /api/orders/:orderId           controllers.api.OrderApiController.update(orderId: String)
+DELETE      /api/orders/:orderId           controllers.api.OrderApiController.delete(orderId: String)
+
+
 

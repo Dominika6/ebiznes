@@ -1,17 +1,18 @@
 package controllers.api
-
+import com.mohiva.play.silhouette.api.Silhouette
 import javax.inject.{Inject, Singleton}
-import play.api.libs.json.{JsError, Json}
+import play.api.libs.json.{JsError, Json, OFormat}
 import play.api.mvc._
 import models.{DirectorRepository, MovieRepository}
-
+import utils.auth.{JsonErrorHandler, JwtEnv, RoleJWTAuthorization}
+import models.auth.UserRoles
 import scala.concurrent.ExecutionContext
 
 case class CreateDirector(firstName: String,
                           surname: String)
 
 object CreateDirector {
-  implicit val directorFormat = Json.format[CreateDirector]
+  implicit val directorFormat: OFormat[CreateDirector] = Json.format[CreateDirector]
 }
 
 
@@ -19,7 +20,7 @@ case class UpdateDirector(firstName: Option[String],
                           surname: Option[String])
 
 object UpdateDirector {
-  implicit val directorFormat = Json.format[UpdateDirector]
+  implicit val directorFormat: OFormat[UpdateDirector] = Json.format[UpdateDirector]
 }
 
 
@@ -27,29 +28,30 @@ object UpdateDirector {
 class DirectorApiController @Inject()(
                                        directorRepository: DirectorRepository,
                                        errorHandler: JsonErrorHandler,
+                                       silhouette: Silhouette[JwtEnv],
                                        movieRepository: MovieRepository,
                                        cc: MessagesControllerComponents)(implicit ec: ExecutionContext) extends MessagesAbstractController(cc) {
 
-  val directorNotFound = NotFound(Json.obj("message" -> "Director does not exist"))
+  val directorNotFound: Result = NotFound(Json.obj("message" -> "Director does not exist"))
 
   def getAll: Action[AnyContent] = Action.async { implicit request =>
-    val directors = directorRepository.getAll()
+    val directors = directorRepository.getAll
     directors.map(director => Ok(Json.toJson(director)))
   }
 
-  def get(id: String) = Action.async { implicit request =>
+  def get(id: String): Action[AnyContent] = Action.async { implicit request =>
     directorRepository.getById(id) map {
       case Some(d) => Ok(Json.toJson(d))
       case None => directorNotFound
     }
   }
 
-  def getMovies(id: String) = Action.async { implicit request =>
+  def getMovies(id: String): Action[AnyContent] = Action.async { implicit request =>
     val movies = movieRepository.getForDirector(id)
     movies.map(movie => Ok(Json.toJson(movie)))
   }
 
-  def create(): Action[AnyContent] = Action.async { implicit request =>
+  def create(): Action[AnyContent] = silhouette.SecuredAction(RoleJWTAuthorization(UserRoles.Admin)) { implicit request =>
     val body = request.body.asJson.get
     body.validate[CreateDirector].fold(
       errors => {
@@ -62,9 +64,9 @@ class DirectorApiController @Inject()(
     )
   }
 
-  def update(id: String): Action[AnyContent] = Action.async { implicit request =>
+  def update(id: String): Action[AnyContent] = silhouette.SecuredAction(RoleJWTAuthorization(UserRoles.Admin)).async { implicit request =>
     directorRepository.getById(id) map {
-      case Some(d) => {
+      case Some(d) =>
         val body = request.body.asJson.get
         body.validate[UpdateDirector].fold(
           errors => {
@@ -75,17 +77,15 @@ class DirectorApiController @Inject()(
             Ok(Json.obj("message" -> "Director updated"))
           }
         )
-      }
       case None => directorNotFound
     }
   }
 
-  def delete(id: String) = Action.async { implicit request =>
+  def delete(id: String): Action[AnyContent] = Action.async { implicit request =>
     directorRepository.getById(id) map {
-      case Some(d) => {
+      case Some(d) =>
         directorRepository.delete(id)
         Ok(Json.obj("message" -> "Director deleted"))
-      }
       case None => directorNotFound
     }
   }

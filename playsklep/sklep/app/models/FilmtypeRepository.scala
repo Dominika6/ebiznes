@@ -1,10 +1,9 @@
 package models
-
 import javax.inject.{Inject, Singleton}
 import play.api.db.slick.DatabaseConfigProvider
 import slick.jdbc.JdbcProfile
-
-import scala.concurrent.ExecutionContext
+import java.util.UUID
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class FilmtypeRepository @Inject()(dbConfigProvider: DatabaseConfigProvider)(implicit ec: ExecutionContext) {
@@ -13,48 +12,37 @@ class FilmtypeRepository @Inject()(dbConfigProvider: DatabaseConfigProvider)(imp
   import dbConfig._
   import profile.api._
 
-  class TypeTable(tag: Tag) extends Table[Type](tag, "filmtype") {
-    def filmtypeId = column[String]("filmtypeId", O.PrimaryKey)
-    def movieType = column[String]("filmtype")
-    def * = (filmtypeId, movieType) <> ((Type.apply _).tupled, Type.unapply)
+  val filmtype = TableQuery[FilmtypeTable]
+  val movieAndFilmtype = TableQuery[MovieAndFilmtypeTable]
+
+  def getAll: Future[Seq[Filmtype]] = db.run {
+    filmtype.result
   }
 
-
-
-  val _filmtype = TableQuery[TypeTable]
-  val _movieTypes = TableQuery[MovieTypeTable]
-
-  def getAll(): Future[Seq[Type]] = db.run {
-    _filmtype.result
-  }
-
-  def getById(filmtypeId: String): Future[Option[Type]] = db.run {
-    _filmtype.filter(_.id === filmtypeId).result.headOption
+  def getById(filmtypeId: String): Future[Option[Filmtype]] = db.run {
+    filmtype.filter(_.filmtypeId === filmtypeId).result.headOption
   }
 
   def isExist(filmtypeId: String): Future[Boolean] = db.run {
-    _filmtype.filter(_.id === filmtypeId).exists.result
+    filmtype.filter(_.filmtypeId === filmtypeId).exists.result
   }
 
-  def getForMovie(movieId: String): Future[Seq[Type]] = db.run {
-    _movieTypes.filter(_.movie === movieId).join(_filmtype).on(_.filmtype === _.id).map {
+  def getForMovie(movieId: String): Future[Seq[Filmtype]] = db.run {
+    movieAndFilmtype.filter(_.movieId === movieId).join(filmtype).on(_.filmtypeId === _.filmtypeId).map {
       case (ma, g) => g
     }.result
   }
 
   def create(name: String): Future[Int] = db.run {
-    val id: String = UUID.randomUUID().toString()
-    _filmtype.insertOrUpdate(Type(id, name))
+    val id: String = UUID.randomUUID().toString
+    filmtype.insertOrUpdate(Filmtype(id, name))
   }
 
   def delete(filmtypeId: String): Future[Int] = db.run {
-    _filmtype.filter(_.id === filmtypeId).delete
+    filmtype.filter(_.filmtypeId === filmtypeId).delete
   }
 
   def update(filmtypeId: String, name: String): Future[Int] = db.run {
-    _filmtype.filter(_.id === filmtypeId).update(Type(filmtypeId, name))
+    filmtype.filter(_.filmtypeId === filmtypeId).update(Filmtype(filmtypeId, name))
   }
-
-
-
 }
