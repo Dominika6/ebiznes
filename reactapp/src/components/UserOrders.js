@@ -32,9 +32,6 @@ const useStyles = makeStyles((theme) => ({
     },
     movieTitle: {
         fontWeight: '900'
-    },
-    movieImg: {
-        width: '70px'
     }
 }));
 
@@ -92,5 +89,4 @@ export default function UserOrders({orders}) {
             </Grid>
         </>
     )
-
 }

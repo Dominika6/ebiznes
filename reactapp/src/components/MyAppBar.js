@@ -35,7 +35,7 @@ export default function MyAppBar() {
         if (userCtx.user) {
             return (
                 <>
-                    <Typography variant="button">{userCtx.user.firstName} {userCtx.user.lastName}</Typography>
+                    <Typography variant="button">{userCtx.user.firstName} {userCtx.user.surname}</Typography>
                     <AppBarBasket/>
                     <Button color="inherit" onClick={logOutHandler}>Wyloguj się</Button>
                 </>

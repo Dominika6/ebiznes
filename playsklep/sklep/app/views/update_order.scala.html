@@ -1,6 +1,12 @@
-@import models.User
-@(id: String, order: Form[CreateOrderForm], users: Seq[User], pays: Seq[Pay], selectedMovies: Seq[String], movies: Seq[Movie])(implicit request: Request[_], flash: Flash)
+@(id: String,
+        order: Form[CreateOrderForm],
+        users: Seq[User],
+        pays: Seq[Pay],
+        selectedMovies: Seq[String],
+        movies: Seq[Movie]
+)(implicit request: Request[_], flash: Flash)
 
+@import models.auth.User
 @import views.html.bootstrap3._
 
 @main("Edycja zamówienia") {
@@ -67,8 +73,4 @@
             @submit("Edytuj")
         }
     </div>
-
 }
-
-
-

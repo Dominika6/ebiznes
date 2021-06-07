@@ -8,7 +8,6 @@ import play.api.data.Forms._
 import play.api.mvc._
 import models.{ActorRepository, MovieRepository}
 import utils.auth.{CookieEnv, RoleCookieAuthorization}
-
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, ExecutionContext, Future}
 

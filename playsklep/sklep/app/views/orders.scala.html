@@ -1,8 +1,9 @@
-@import models.Order
-@import views.html.bootstrap3._
-@import models.User
-
 @(orders: Seq[(Order, Pay, User, Double)])(implicit flash: Flash)
+
+@import models.Order
+@import models.auth.User
+@import views.html.bootstrap3._
+
 @main("Zamówienia") {
     @alerts(flash)
     <table class="table" summary="Zamowienia">

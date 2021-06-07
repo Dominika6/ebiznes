@@ -25,7 +25,7 @@ class RateController @Inject()(rateRepository: RateRepository, userRepository: U
     )(CreateRateForm.apply)(CreateRateForm.unapply)
   }
 
-  def getAll: Action[AnyContent] = silhouette.SecuredAction(RoleCookieAuthorization(UserRoles.User)).async { implicit request: Request[_]  =>
+  def getAll = silhouette.SecuredAction(RoleCookieAuthorization(UserRoles.User)).async { implicit request: Request[_]  =>
     val rates = rateRepository.getAllWithMovieAndUser
     rates.map(rate => Ok(views.html.rates(rate)))
   }

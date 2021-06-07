@@ -4,7 +4,7 @@ import slick.jdbc.SQLiteProfile.api._
 
 case class MovieAndFilmtype(movieId: String, filmtypeId: String)
 
-class MovieAndFilmtypeTable(tag: Tag) extends Table[MovieAndFilmtype](tag, "movieAndTypeTable") {
+class MovieAndFilmtypeTable(tag: Tag) extends Table[MovieAndFilmtype](tag, "movieAndFilmtypeTable") {
 
   val movie = TableQuery[MovieTable]
   val filmtype = TableQuery[FilmtypeTable]
@@ -18,5 +18,5 @@ class MovieAndFilmtypeTable(tag: Tag) extends Table[MovieAndFilmtype](tag, "movi
 }
 
 object MovieAndFilmtype{
-  implicit val movieAndTypeFormat: OFormat[MovieAndFilmtype] = Json.format[MovieAndFilmtype]
+  implicit val movieAndFilmtypeFormat: OFormat[MovieAndFilmtype] = Json.format[MovieAndFilmtype]
 }

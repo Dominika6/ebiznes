@@ -1,21 +1,21 @@
 import React, {useEffect, useState} from 'react';
-import API from "./API";
+import API from "../../src/utils/api/API";
 import {useHistory, useParams} from "react-router-dom";
 import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
-import Rating from "@material-ui/lab/Rating/Rating";
+import Rate from "@material-ui/lab/Rating/Rating";
 import MovieComments from "./MovieComments";
-import MovieRatings from "./MovieRatings";
+import MovieRates from "./MovieRates";
 import MovieDirectors from "./MovieDirectors";
 import MovieActors from "./MovieActors";
 import MovieControl from "./MovieControl";
-import {movieApi} from "./movie.api";
+import {movieApi} from "../utils/api/movie.api";
 
 export default function Movie(props) {
     const [movie, setMovie] = useState({});
-    const [filmtypes, setGenres] = useState([]);
-    const [rates, setRatings] = useState([]);
-    const [rate, setRating] = useState(0);
+    const [filmtypes, setFilmtypes] = useState([]);
+    const [rates, setRates] = useState([]);
+    const [rate, setRate] = useState(0);
 
     const urlParams = useParams();
     const movieId = urlParams.movieId;
@@ -34,15 +34,15 @@ export default function Movie(props) {
             }
 
             res = await API.get(`${url}/filmtypes`);
-            setGenres(res.data);
+            setFilmtypes(res.data);
 
             res = await API.get(`${url}/rates`);
             let _rates = res.data;
-            setRatings(_rates);
+            setRates(_rates);
 
             if (_rates.length > 0) {
                 const sum = _rates.reduce((a, b) => +a + +b.value, 0);
-                setRating(sum/_rates.length)
+                setRate(sum/_rates.length)
             }
         };
         fetchData();
@@ -62,7 +62,7 @@ export default function Movie(props) {
                 </Grid>
                 <Grid item xs={5}>
                     <h1>{movie.title}</h1>
-                    <Rating value={rate} max={10} readOnly/>
+                    <Rate value={rate} max={10} readOnly/>
                     <p>{movie.details}</p>
                 </Grid>
                 <Grid item xs={4}>
@@ -73,7 +73,7 @@ export default function Movie(props) {
 
             <Grid container direction="row" spacing={4}>
                 <Grid item xs={3}>
-                    <MovieRatings ratings={rates}/>
+                    <MovieRates rates={rates}/>
                 </Grid>
                 <Grid item xs={6}>
                     <MovieComments movieId={movieId}/>

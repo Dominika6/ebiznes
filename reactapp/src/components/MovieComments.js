@@ -2,7 +2,7 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText/ListItemText";
 import React, {useEffect, useState} from "react";
 import Typography from "@material-ui/core/Typography";
-import {movieApi} from "./movie.api";
+import {movieApi} from "../utils/api/movie.api";
 import {AccountCircle} from "@material-ui/icons";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import * as colors from "@material-ui/core/colors";

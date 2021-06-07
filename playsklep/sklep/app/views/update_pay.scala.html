@@ -1,4 +1,6 @@
-@(id: String, filmtype: Form[CreatePayForm])(implicit request: Request[_], flash: Flash)
+@(id: String,
+        payForm: Form[CreatePayForm]
+)(implicit request: Request[_], flash: Flash)
 
 @import views.html.bootstrap3._
 
@@ -7,12 +9,8 @@
         @alerts(flash)
         @helper.form(controllers.routes.PayController.updatePayHandler(id)) {
             @helper.CSRF.formField
-            @text(filmtype("filmtype"), "Nazwa")
+            @text(payForm("method"), "Nazwa")
             @submit("Edytuj")
         }
     </div>
-
 }
-
-
-

@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {useHistory, useParams} from "react-router-dom";
-import {actorApi} from "./actor.api";
-import {movieApi} from "./movie.api";
+import {actorApi} from "../utils/api/actor.api";
+import {movieApi} from "../utils/api/movie.api";
 import MovieGrid from "./MovieGrid";
 
 export default function ActorMovies() {
@@ -25,8 +25,7 @@ export default function ActorMovies() {
         };
 
         fetchData();
-    }, [urlParams.filmtypeName]);
-
+    }, [history, urlParams.actorId, urlParams.filmtype]);
 
     return (
         <MovieGrid movies={movies} setMovies={setMovies} title={`Filmy z udziałem: ${actor.firstName} ${actor.surname}`} />

@@ -1,4 +1,7 @@
-@(id: String, user: Form[CreateUserForm], isAdmin: Boolean)(implicit request: Request[_], flash: Flash)
+@(id: String,
+        user: Form[CreateUserForm],
+        isAdmin: Boolean
+)(implicit request: Request[_], flash: Flash)
 
 @import views.html.bootstrap3._
 
@@ -17,18 +20,12 @@
                         name="isAdmin"
                         id="isAdmin"
                         value="true"
-                        @if(isAdmin){checked}
-                        >
+                        @if(isAdmin){checked}>
                         Administrator
                     </label>
                 </div>
             </div>
-
             @submit("Edytuj")
         }
     </div>
-
 }
-
-
-

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {movieApi} from "./movie.api";
+import {movieApi} from "../utils/api/movie.api";
 import MovieGrid from "./MovieGrid";
 
 export default function AllMovies() {
@@ -13,7 +13,6 @@ export default function AllMovies() {
 
         fetchData();
     }, []);
-
 
     return (
         <MovieGrid movies={movies} setMovies={setMovies}/>

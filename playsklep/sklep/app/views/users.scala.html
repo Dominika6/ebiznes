@@ -1,7 +1,7 @@
-@import models.User
-@import views.html.bootstrap3._
-
 @(users: Seq[User])(implicit flash: Flash)
+
+@import models.auth.User
+@import views.html.bootstrap3._
 
 @main("Użytkownicy") {
     @alerts(flash)
@@ -30,5 +30,4 @@
         }
         </tbody>
     </table>
-@*    <a href="@controllers.routes.UserController.create()" class="btn btn-light float-right" role="button" aria-pressed="true">Dodaj</a>*@
 }

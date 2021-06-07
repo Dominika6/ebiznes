@@ -1,5 +1,5 @@
 import API from "./API";
-import {ratingApi} from "./rating.api";
+import {rateApi} from "./rate.api";
 
 class MovieApi {
     async getAll() {
@@ -11,7 +11,7 @@ class MovieApi {
             console.error(e);
         }
         try {
-            await this.addRatings(movies);
+            await this.addRates(movies);
             await this.addUserInfo(movies);
         } catch (e) {}
         return movies;
@@ -37,7 +37,7 @@ class MovieApi {
         return movies;
     }
 
-    async getForGenre(filmtypeId) {
+    async getForFilmtype(filmtypeId) {
         let movies = [];
         try {
             movies = await API.get(`/filmtypes/${filmtypeId}/movies`);
@@ -46,7 +46,7 @@ class MovieApi {
             console.error(e);
         }
         try {
-            await this.addRatings(movies);
+            await this.addRates(movies);
             await this.addUserInfo(movies);
         } catch (e) {}
         return movies;
@@ -62,7 +62,7 @@ class MovieApi {
         }
 
         try {
-            await this.addRatings(movies);
+            await this.addRates(movies);
             await this.addUserInfo(movies);
         } catch (e) {}
         return movies;
@@ -77,22 +77,22 @@ class MovieApi {
             console.error(e);
         }
         try {
-            await this.addRatings(movies);
+            await this.addRates(movies);
             await this.addUserInfo(movies);
         } catch (e) {}
         return movies;
     }
 
-    async getMovieGenre(movieId) {
-        let genres = [];
+    async getMovieFilmtype(movieId) {
+        let filmtypes = [];
         try {
-            genres = await API.get(`/movies/${movieId}/filmtypes`);
-            genres = genres.data
+            filmtypes = await API.get(`/movies/${movieId}/filmtypes`);
+            filmtypes = filmtypes.data
         } catch (e) {
             console.error(e);
         }
 
-        return genres;
+        return filmtypes;
     }
 
     async getMovieComments(movieId) {
@@ -107,16 +107,16 @@ class MovieApi {
         return comments;
     }
 
-    async getMovieRatings(movieId) {
-        let ratings = [];
+    async getMovieRates(movieId) {
+        let rates = [];
         try {
-            ratings = await API.get(`/movies/${movieId}/rates`);
-            ratings = ratings.data
+            rates = await API.get(`/movies/${movieId}/rates`);
+            rates = rates.data
         } catch (e) {
             console.error(e);
         }
 
-        return ratings;
+        return rates;
     }
 
     async getMovieDirectors(movieId) {
@@ -143,21 +143,21 @@ class MovieApi {
         return actors;
     }
 
-    async addRatings(movies) {
-        let ratings = [];
+    async addRates(movies) {
+        let rates = [];
         try {
-            ratings = await ratingApi.getAll();
+            rates = await rateApi.getAll();
         } catch (e) {
             console.error(e);
         }
 
         for (let movie of movies) {
-            const movieRatings = ratings.filter(r => r.movie.id === movie.id);
-            const sum = movieRatings.reduce((a, b) => +a + +b.value, 0);
-            if (movieRatings.length > 0) {
-                movie.rating = sum/movieRatings.length
+            const movieRates = rates.filter(r => r.movie.id === movie.id);
+            const sum = movieRates.reduce((a, b) => +a + +b.value, 0);
+            if (movieRates.length > 0) {
+                movie.rate = sum/movieRates.length
             } else {
-                movie.rating = 0
+                movie.rate = 0
             }
         }
     }

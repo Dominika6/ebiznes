@@ -1,7 +1,7 @@
 import React, {useContext, useEffect, useState} from "react";
 import Button from "@material-ui/core/Button";
 import {AddCircle, DeleteForever, LibraryAddCheck} from '@material-ui/icons';
-import {movieApi} from "./movie.api";
+import {movieApi} from "../utils/api/movie.api";
 import {BasketContext} from "./BasketContext";
 import green from "@material-ui/core/colors/green";
 import {createMuiTheme} from "@material-ui/core";
@@ -31,7 +31,7 @@ export default function MovieControl({movieId, movieTitle}) {
         };
 
         fetchData();
-    }, []);
+    }, [movieId]);
 
 
     const BasketButton = () => {
@@ -66,9 +66,8 @@ export default function MovieControl({movieId, movieTitle}) {
     } else {
         return (
             <>
-                <div> Watch film! </div>
+                <div> You can watch now. </div>
             </>
         );
     }
-
 }

@@ -1,7 +1,8 @@
+@(filmtypes: Seq[Filmtype])(implicit flash: Flash)
+
 @import models.Filmtype
 @import views.html.bootstrap3._
 
-@(filmtypes: Seq[Filmtype])(implicit flash: Flash)
 @main("Gatunki") {
     @alerts(flash)
     <table class="table" summary="Gatunki">

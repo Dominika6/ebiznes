@@ -1,7 +1,9 @@
-@import models.{Movie, Order, MovieToOrder, Pay}
-@import models.User
+@(order: (Order, Pay, User),
+        movieToOrders: Seq[(MovieToOrder, Movie)],
+        sum: Double)
 
-@(order: (Order, Pay, User), movieToOrders: Seq[(MovieToOrder, Movie)], sum: Double)
+@import models.auth.User
+@import models.{Movie, MovieToOrder, Order, Pay}
 
 @main("Zamówienie #" + order._1.orderId) {
     <table class="table" summary="Zamowienie - filmy">

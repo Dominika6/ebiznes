@@ -1,14 +1,14 @@
 import {Grid, Paper} from "@material-ui/core";
 import React, {useContext, useEffect, useState} from "react";
 import Typography from "@material-ui/core/Typography";
-import Rating from '@material-ui/lab/Rating';
+import Rate from '@material-ui/lab/Rating';
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import {useHistory} from 'react-router-dom';
 import Box from "@material-ui/core/Box";
 import Divider from "@material-ui/core/Divider";
 import Chip from "@material-ui/core/Chip";
-import API from "./API";
-import {movieApi} from "./movie.api";
+import API from "../../src/utils/api/API";
+import {movieApi} from "../utils/api/movie.api";
 import {UserContext} from "./UserContext";
 
 
@@ -20,19 +20,19 @@ const useStyles = makeStyles({
         marginBlockStart: '0.3em',
         marginBlockEnd: '0.1em'
     },
-    movieProductionYear: {
+    moviePublicationDate: {
         color: '#ccc'
     },
-    movieDescription: {
+    movieDetails: {
         marginBlockStart: '32px'
     },
     link: {
         textDecoration: 'none'
     },
-    genres: {
+    filmtypes: {
         marginLeft: '16px'
     },
-    genre: {
+    filmtype: {
         borderRadius: 0,
         marginLeft: '4px'
     },
@@ -59,30 +59,30 @@ export default function LibraryItem(props) {
     const {userCtx} = useContext(UserContext);
 
     let history = useHistory();
-    const [genres, setGenres] = useState([]);
+    const [filmtypes, setFilmtypes] = useState([]);
     const [actors, setActors] = useState([]);
     const [directors, setDirectors] = useState([]);
-    const [rating, setRating] = useState(0);
+    const [rate, setRate] = useState(0);
 
     useEffect(() => {
         const fetchData = async () => {
-            setGenres(await movieApi.getMovieGenre(movie.movieId));
+            setFilmtypes(await movieApi.getMovieFilmtype(movie.movieId));
             setActors(await movieApi.getMovieActors(movie.movieId));
             setDirectors(await movieApi.getMovieDirectors(movie.movieId));
             if (userCtx.user) {
-                const ratings = await movieApi.getMovieRatings(movie.movieId);
-                const userRatings = ratings.filter(_rating => _rating.user.userId === userCtx.user.userId);
-                if (userRatings.length > 0) {
-                    setRating(userRatings[0].result)
+                const rates = await movieApi.getMovieRates(movie.movieId);
+                const userRates = rates.filter(_rate => _rate.user.userId === userCtx.user.userId);
+                if (userRates.length > 0) {
+                    setRate(userRates[0].result)
                 }
             }
         };
 
         fetchData();
-    }, [rating]);
+    }, [movie.movieId, rate, userCtx.user]);
 
-    const handleGenreClick = (genreName) => {
-        history.push(`/gatunek/${genreName.toLowerCase()}`);
+    const handleFilmtypeClick = (filmtypeName) => {
+        history.push(`/gatunek/${filmtypeName.toLowerCase()}`);
     };
 
     const handleActorClick = (actorId) => {
@@ -94,12 +94,12 @@ export default function LibraryItem(props) {
     };
 
 
-    const onRatingChange = async (event, result) => {
+    const onRateChange = async (event, result) => {
         await API.post('/rates', {
             result: result,
             movie: movie.movieId
         });
-        setRating(result)
+        setRate(result)
     };
 
     return (
@@ -113,14 +113,14 @@ export default function LibraryItem(props) {
                             <Box display="flex" flexDirection="row" justifyContent="space-between">
                                 <Box>
                                     <Typography component="span" className={classes.moviePublicationDate} variant="subtitle1">{movie.publicationDate}</Typography>
-                                    <Box component="span" className={classes.genres}>
-                                        {genres.map(genre => (
-                                            <Chip size="small" key={genre.filmtypeId} onClick={() => handleGenreClick(genre.filmtype)} className={classes.genre} variant="outlined" color="secondary" label={genre.filmtype} />
+                                    <Box component="span" className={classes.filmtypes}>
+                                        {filmtypes.map(filmtype => (
+                                            <Chip size="small" key={filmtype.filmtypeId} onClick={() => handleFilmtypeClick(filmtype.filmtype)} className={classes.filmtype} variant="outlined" color="secondary" label={filmtype.filmtype} />
                                         ))}
                                     </Box>
                                 </Box>
                                 <Box>
-                                    <Rating name={movie.title} onChange={onRatingChange} value={rating}  defaultValue={2} max={10} />
+                                    <Rate name={movie.title} onChange={onRateChange} value={rate}  defaultValue={2} max={10} />
                                 </Box>
                             </Box>
                             <Box>

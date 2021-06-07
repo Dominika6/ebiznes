@@ -1,7 +1,9 @@
-@import models.Rate
-@import views.html.bootstrap3._
-@import models.User
 @(rates: Seq[(Rate, Movie, User)])(implicit flash: Flash)
+
+@import models.Rate
+@import models.auth.User
+@import views.html.bootstrap3._
+
 @main("Oceny") {
     @alerts(flash)
     <table class="table" summary="Oceny">
@@ -19,7 +21,7 @@
             <tr>
                 <th scope="row"><span class="badge badge-light">@rate._1.rateId</span></th>
                 <td>@rate._3.firstName @rate._3.surname</td>
-                <td><a href="@controllers.routes.MovieController.get(rate._2.rateId)">@rate._2.title</a></td>
+                <td><a href="@controllers.routes.MovieController.get(rate._2.movieId)">@rate._2.title</a></td>
                 <td>
                     <div class="progress">
                         <div class="progress-bar @if(rate._1.result < 4) {bg-danger} @if(rate._1.result > 7) {bg-success}" role="progressbar" style="width: @(rate._1.result * 10)%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="10">@rate._1.result</div>

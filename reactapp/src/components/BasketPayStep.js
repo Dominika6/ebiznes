@@ -4,7 +4,7 @@ import StepContent from "@material-ui/core/StepContent/StepContent";
 import Button from "@material-ui/core/Button";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Step from "@material-ui/core/Step/Step";
-import {orderApi} from "./order.api";
+import {orderApi} from "../utils/api/order.api";
 import FormControl from "@material-ui/core/FormControl";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
@@ -22,20 +22,20 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export default function BasketPaymentStep({handleBack, handleNext, ...other}) {
+export default function BasketPayStep({handleBack, handleNext, ...other}) {
     const classes = useStyles();
-    const [paymentMethods, setPaymentMethods] = useState([]);
-    const { getBasketPayment, setPayment } = useContext(BasketContext);
-    const [value, setValue] = useState(getBasketPayment);
+    const [payMethods, setPayMethods] = useState([]);
+    const { getBasketPay, setPay } = useContext(BasketContext);
+    const [value, setValue] = useState(getBasketPay);
 
     const handleChange = (event) => {
-        setPayment(event.target.value);
+        setPay(event.target.value);
         setValue(event.target.value);
     };
 
     useEffect(() => {
         const fetchData = async () => {
-            setPaymentMethods(await orderApi.getPaymentMethods())
+            setPayMethods(await orderApi.getPayMethods())
         };
         fetchData();
     }, []);
@@ -45,9 +45,9 @@ export default function BasketPaymentStep({handleBack, handleNext, ...other}) {
             <StepLabel>Metoda płatności</StepLabel>
             <StepContent>
                 <FormControl component="fieldset">
-                    <RadioGroup aria-label="payment" name="gender1" value={value} onChange={handleChange}>
-                        {paymentMethods.map(payment => (
-                            <FormControlLabel value={payment.payId} control={<Radio />} label={payment.method} />
+                    <RadioGroup aria-label="pay" name="gender1" value={value} onChange={handleChange}>
+                        {payMethods.map(pay => (
+                            <FormControlLabel value={pay.payId} control={<Radio />} label={pay.method} />
                         ))}
                     </RadioGroup>
                     {value === "4" ? <TextField id="filled-basic" label="Wpisz kupon" variant="filled" /> : null }

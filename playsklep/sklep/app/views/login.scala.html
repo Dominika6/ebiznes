@@ -1,6 +1,7 @@
+@(user: Form[Login])(implicit request: MessagesRequestHeader, flash: Flash)
+
 @import views.html.bootstrap3._
 
-@(user: Form[Login])(implicit request: MessagesRequestHeader, flash: Flash)
 @main("Zaloguj się", false) {
     <div class="col">
         @alerts(flash)

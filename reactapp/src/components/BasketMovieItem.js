@@ -97,7 +97,7 @@ export default function BasketMovieItem({movie}) {
                     <h2 className={classes.movieTitle}>{movie.title}</h2>
                     <Box display="flex" flexDirection="row" justifyContent="space-between">
                         <Box>
-                            <Typography component="span" className={classes.movieProductionYear} variant="subtitle2">{movie.publicationDate}</Typography>
+                            <Typography component="span" className={classes.moviePublicationDate} variant="subtitle2">{movie.publicationDate}</Typography>
                         </Box>
                         <Box>
                             <Typography color={"secondary"} component="span" className={classes.moviePrice} variant="h5">{movie.price} zł</Typography>

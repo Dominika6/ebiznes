@@ -1,6 +1,9 @@
-@import models.User
-@(rating: Form[CreateRateForm], users: Seq[User], movies: Seq[Movie])(implicit request: Request[_], flash: Flash)
+@(rate: Form[CreateRateForm],
+        users: Seq[User],
+        movies: Seq[Movie]
+)(implicit request: Request[_], flash: Flash)
 
+@import models.auth.User
 @import views.html.bootstrap3._
 
 @main("Dodaj ocenę filmu") {
@@ -8,7 +11,7 @@
         @alerts(flash)
         @helper.form(controllers.routes.RateController.createRateHandler()) {
             @helper.CSRF.formField
-            @number(rating("result"), "Ocena")
+            @number(rate("result"), "Ocena")
 
             <div class="form-group">
                 <label class="col-sm-2 control-label">Użytkownik</label>
@@ -40,8 +43,4 @@
             @submit()
         }
     </div>
-
 }
-
-
-

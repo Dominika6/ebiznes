@@ -1,6 +1,8 @@
+@(directors: Seq[Director])(implicit flash: Flash)
+
 @import models.Director
 @import views.html.bootstrap3._
-@(directors: Seq[Director])(implicit flash: Flash)
+
 @main("Reżyserzy") {
     @alerts(flash)
     <table class="table" summary="Rezyserzy">

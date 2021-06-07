@@ -1,6 +1,6 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {Box, Grid} from '@material-ui/core';
-import {movieApi} from "./movie.api";
+import {movieApi} from "../utils/api/movie.api";
 import {UserContext} from "./UserContext";
 import LibraryItem from "./LibraryItem";
 
@@ -11,7 +11,7 @@ export default function UserLibrary() {
     useEffect(() => {
         const fetchData = async () => {
             let _movies = await movieApi.getForUser();
-            await movieApi.addRatings(_movies);
+            await movieApi.addRates(_movies);
             if (userCtx.user) {
                 await movieApi.addUserInfo(_movies)
             }

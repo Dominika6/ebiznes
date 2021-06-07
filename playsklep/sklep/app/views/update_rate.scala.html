@@ -1,6 +1,10 @@
-@import models.User
-@(id: String, rate: Form[CreateRateForm], users: Seq[User], movies: Seq[Movie])(implicit request: Request[_], flash: Flash)
+@(id: String,
+        rate: Form[CreateRateForm],
+        users: Seq[User],
+        movies: Seq[Movie]
+)(implicit request: Request[_], flash: Flash)
 
+@import models.auth.User
 @import views.html.bootstrap3._
 
 @main("Edycja oceny") {
@@ -18,7 +22,7 @@
                     id="userId"
                     name="userId">
                     @for(u <- users) {
-                        @if(u.userId == rate("userId").result.getOrElse("")) {
+                        @if(u.userId == rate("userId").value.getOrElse("")) {
                             <option selected id="@u.userId" value="@u.userId" >@u.firstName @u.surname</option>
                         } else {
                             <option id="@u.userId" value="@u.userId" >@u.firstName @u.surname</option>
@@ -36,7 +40,7 @@
                     id="movieId"
                     name="movieId">
                     @for(m <- movies) {
-                        @if(m.movieId == rate("movieId").result.getOrElse("")) {
+                        @if(m.movieId == rate("movieId").value.getOrElse("")) {
                             <option selected id="@m.movieId" value="@m.movieId" >@m.title</option>
                         } else {
                             <option id="@m.movieId" value="@m.movieId" >@m.title</option>
@@ -48,8 +52,4 @@
             @submit("Edytuj")
         }
     </div>
-
 }
-
-
-

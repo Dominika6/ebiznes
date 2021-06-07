@@ -1,6 +1,12 @@
+@(movie: Movie,
+        comments: Seq[(Comment, User)],
+        rates: Seq[(Rate, User)],
+        actors: Seq[Actor],
+        directors: Seq[Director],
+        filmtypes: Seq[Filmtype])
+
 @import models.Movie
-@import models.User
-@(movie: Movie, comments: Seq[(Comment, User)], rates: Seq[(Rate, User)], actors: Seq[Actor], directors: Seq[Director], filmtypes: Seq[Filmtype])
+@import models.auth.User
 
 @main(movie.title) {
 
@@ -10,11 +16,11 @@
             @for(filmtype <- filmtypes) {
                 <span class="badge px-1"><a href="@controllers.routes.FilmtypeController.get(filmtype.filmtypeId)">@filmtype.filmtype</a></span>
             }
-            <span class="float-right badge badge-primary">@movie.price zł</span>
+            <span class="float-right badge badge-primary">@movie.price</span>
         </h4>
         <p>@movie.details</p>
 
-        @if(!directors.isEmpty) {
+        @if(directors.nonEmpty) {
             <div class="my-4 py-3">
                 <h5 class="mb-3">@if(directors.length > 1) {Reżyserzy} else {Reżyser}</h5>
                 <ul class="list-group">
@@ -25,7 +31,7 @@
             </div>
         }
 
-        @if(!actors.isEmpty) {
+        @if(actors.nonEmpty) {
             <div class="my-4 py-3">
                 <h5 class="mb-3">Obsada</h5>
                 <ul class="list-group">
@@ -36,7 +42,7 @@
             </div>
         }
 
-        @if(!comments.isEmpty) {
+        @if(comments.nonEmpty) {
             <div class="my-4 py-3">
                 <h5 class="mb-3">Komentarze</h5>
                 <ul class="list-group">
@@ -47,17 +53,16 @@
             </div>
         }
 
-        @if(!ratings.isEmpty) {
+        @if(rates.nonEmpty) {
             <div class="my-4 py-3">
                 <h5 class="mb-3">Oceny</h5>
                 <ul class="list-group">
-                @for(rating <- ratings) {
-                    <li class="list-group-item">@rating._2.firstName @rating._2.lastName: @rating._1.value</li>
+                @for(rate <- rates) {
+                    <li class="list-group-item">@rate._2.firstName @rate._2.surname: @rate._1.result</li>
                 }
                 </ul>
             </div>
         }
-
 
     </div>
     <hr>

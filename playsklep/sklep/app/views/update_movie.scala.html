@@ -1,5 +1,4 @@
-@(
-        id: String,
+@(id: String,
         movie: Form[CreateMovieForm],
         selectedActors: Seq[String],
         actors: Seq[Actor],
@@ -35,7 +34,6 @@
                         } else {
                             <option id="@d.directorId" value="@d.directorId" >@d.firstName @d.surname</option>
                         }
-
                     }
                     </select>
                 </div>
@@ -81,8 +79,4 @@
             @submit("Edytuj")
         }
     </div>
-
 }
-
-
-

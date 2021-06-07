@@ -1,22 +1,22 @@
 import API from "./API";
 
 class OrderApi {
-    async getPaymentMethods() {
-        let payments = [];
+    async getPayMethods() {
+        let pays = [];
         try {
-            payments = await API.get('/pays');
-            payments = payments.data;
+            pays = await API.get('/pays');
+            pays = pays.data;
         } catch (e) {
             console.log(e);
         }
-        return payments;
+        return pays;
     }
 
-    async makeOrder(payment, movies) {
+    async makeOrder(pay, movies) {
         if (movies.length === 0) {
             throw new Error()
         }
-        await API.post('/orders', { payment, movies })
+        await API.post('/orders', { pay, movies })
     }
 
     async getUserOrders() {

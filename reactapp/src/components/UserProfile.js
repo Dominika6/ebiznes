@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useState} from "react";
-import {orderApi} from "./order.api";
+import {orderApi} from "../utils/api/order.api";
 import UserOrders from "./UserOrders";
 import Grid from "@material-ui/core/Grid";
 import EditUser from "./EditUser";
@@ -39,5 +39,4 @@ export default function UserProfile() {
             </>
         )
     }
-
 }

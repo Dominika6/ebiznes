@@ -13,7 +13,7 @@ import TableCell from "@material-ui/core/TableCell";
 import TableBody from "@material-ui/core/TableBody";
 import Chip from "@material-ui/core/Chip";
 import {useHistory} from "react-router-dom";
-import {orderApi} from "./order.api";
+import {orderApi} from "../utils/api/order.api";
 import Alert from "@material-ui/lab/Alert";
 import {BasketContext} from "./BasketContext";
 
@@ -29,9 +29,7 @@ const useStyles = makeStyles((theme) => ({
         maxWidth: '60%'
     },
     price: {
-        // borderRadius: 0,
         fontWeight: '600',
-        // fontSize: '1.2rem'
     },
     summaryPrice: {
         borderRadius: 0,
@@ -43,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export default function BaksetSummaryStep({handleBack, handleNext, basketMovies, basketMoviesIds, basketPayment, basketPrice, ...other}) {
+export default function BaksetSummaryStep({handleBack, handleNext, basketMovies, basketMoviesIds, basketPay, basketPrice, ...other}) {
     const classes = useStyles();
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState(false);
@@ -52,7 +50,7 @@ export default function BaksetSummaryStep({handleBack, handleNext, basketMovies,
 
     const makeOrderHandler = async () => {
         try {
-            await orderApi.makeOrder(basketPayment, basketMoviesIds);
+            await orderApi.makeOrder(basketPay, basketMoviesIds);
             setSuccess(true);
             setTimeout(() => {
                 removeAllMoviesFromBasket();

@@ -6,9 +6,8 @@ import {BasketContext} from "./BasketContext";
 import Menu from "@material-ui/core/Menu";
 import {withStyles} from "@material-ui/styles";
 import ListItemText from "@material-ui/core/ListItemText";
-import {movieApi} from "./movie.api";
+import {movieApi} from "../utils/api/movie.api";
 import ListItem from "@material-ui/core/ListItem";
-import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import Box from "@material-ui/core/Box";
 import Chip from "@material-ui/core/Chip";
 import {NavLink} from "react-router-dom";
@@ -82,12 +81,6 @@ export default function AppBarBasket() {
             >
                 {basketMovies.map(movie => (
                     <ListItem style={{width: '320px'}} key={movie.id} role={undefined} dense button component={NavLink} exact={true} to={`/filmy/${movie.id}`} >
-
-                        <Box pr={3}>
-                            <ListItemAvatar>
-                                <img height="90px" alt={movie.title} src={movie.img}/>
-                            </ListItemAvatar>
-                        </Box>
                         <ListItemText primary={movie.title} />
                         <Box ml={4}>
                             <Chip color="secondary" label={`${movie.price} zł`} />

@@ -1,5 +1,8 @@
-@(movie: Form[CreateMovieForm], actors: Seq[Actor], directors: Seq[Director], filmtypes: Seq[Filmtype])(implicit request: Request[_], flash: Flash)
-
+@(movie: Form[CreateMovieForm],
+        actors: Seq[Actor],
+        directors: Seq[Director],
+        filmtypes: Seq[Filmtype]
+)(implicit request: Request[_], flash: Flash)
 
 @import views.html.bootstrap3._
 
@@ -60,8 +63,4 @@
             @submit()
         }
     </div>
-
 }
-
-
-

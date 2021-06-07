@@ -1,5 +1,6 @@
-@import models.Actor
 @(actor: Actor, movies: Seq[Movie])
+
+@import models.Actor
 
 @main(actor.firstName + " " + actor.surname) {
     <table class="table" summary="Filmy aktora">

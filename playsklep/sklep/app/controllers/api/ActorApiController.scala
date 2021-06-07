@@ -1,4 +1,4 @@
-package controllers.api
+package controllers.apiJWTAuthenticator
 import com.mohiva.play.silhouette.api.Silhouette
 import models.auth.UserRoles
 import javax.inject.{Inject, Singleton}
@@ -36,7 +36,7 @@ class ActorApiController @Inject()(
   val actorNotFound: Result = NotFound(Json.obj("message" -> "Actor does not exist"));
 
   def getAll: Action[AnyContent] = Action.async { implicit request =>
-    val actors = actorRepository.getAll;
+    val actors = actorRepository.getAll();
     actors.map(actor => Ok(Json.toJson(actor)))
   }
 

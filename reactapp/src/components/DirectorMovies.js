@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {useHistory, useParams} from "react-router-dom";
-import {directorApi} from "./director.api";
-import {movieApi} from "./movie.api";
+import {directorApi} from "../utils/api/director.api";
+import {movieApi} from "../utils/api/movie.api";
 import MovieGrid from "./MovieGrid";
 
 export default function DirectorMovies() {
@@ -26,7 +26,7 @@ export default function DirectorMovies() {
         };
 
         fetchData();
-    }, [urlParams.filmtypeName]);
+    }, [history, urlParams.directorId, urlParams.filmtype]);
 
 
     return (

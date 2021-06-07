@@ -1,7 +1,7 @@
 import {Grid, Paper} from "@material-ui/core";
 import React from "react";
 import Typography from "@material-ui/core/Typography";
-import Rating from '@material-ui/lab/Rating';
+import Rate from '@material-ui/lab/Rating';
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import {Link} from 'react-router-dom';
 import Box from "@material-ui/core/Box";
@@ -73,10 +73,10 @@ export default function MovieGridItem(props) {
                             <h2 className={classes.movieTitle}>{movie.title}</h2>
                             <Box display="flex" flexDirection="row" justifyContent="space-between">
                                 <Box>
-                                    <Typography component="span" className={classes.moviepPublicationDate} variant="subtitle2">{movie.publicationDate}</Typography>
+                                    <Typography component="span" className={classes.moviePublicationDate} variant="subtitle2">{movie.publicationDate}</Typography>
                                 </Box>
                                 <Box>
-                                    <Rating name="half-rating-read size-small" defaultValue={movie.rate/2} precision={0.5} size="small" readOnly />
+                                    <Rate name="half-rate-read size-small" defaultValue={movie.rate/2} precision={0.5} size="small" readOnly />
                                 </Box>
                             </Box>
                         </Box>

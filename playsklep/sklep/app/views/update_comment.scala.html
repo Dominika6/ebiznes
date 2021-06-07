@@ -1,6 +1,10 @@
-@import models.User
-@(commentId: String, comment: Form[CreateCommentForm], users: Seq[User], movies: Seq[Movie])(implicit request: Request[_], flash: Flash)
+@(commentId: String,
+        comment: Form[CreateCommentForm],
+        users: Seq[User],
+        movies: Seq[Movie]
+)(implicit request: Request[_], flash: Flash)
 
+@import models.auth.User
 @import views.html.bootstrap3._
 
 @main("Edycja komentarza") {
@@ -18,7 +22,7 @@
                     id="userId"
                     name="userId">
                     @for(u <- users) {
-                        @if(u.id == comment("userId").value.getOrElse("")) {
+                        @if(u.userId == comment("userId").value.getOrElse("")) {
                             <option selected id="@u.userId" value="@u.userId" >@u.firstName @u.surname</option>
                         } else {
                             <option id="@u.userId" value="@u.userId" >@u.firstName @u.surname</option>

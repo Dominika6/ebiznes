@@ -11,7 +11,7 @@ import ListItemText from "@material-ui/core/ListItemText/ListItemText";
 import Divider from "@material-ui/core/Divider";
 import ListSubheader from "@material-ui/core/ListSubheader";
 import Drawer from "@material-ui/core/Drawer/Drawer";
-import {genreApi} from "./genre.api";
+import {filmtypeApi} from "../utils/api/filmtype.api";
 import {UserContext} from "./UserContext";
 
 const drawerWidth = 240;
@@ -40,13 +40,13 @@ const useStyles = makeStyles((theme) => ({
 
 export default function MyDrawer() {
     const classes = useStyles();
-    const [genres, setGenres] = useState([]);
+    const [filmtypes, setFilmtypes] = useState([]);
     const {userCtx} = useContext(UserContext);
 
     useEffect(() => {
         const fetchData = async () => {
-            const _genres = await genreApi.getAll();
-            setGenres(_genres);
+            const _filmtypes = await filmtypeApi.getAll();
+            setFilmtypes(_filmtypes);
         };
 
         fetchData();
@@ -104,10 +104,10 @@ export default function MyDrawer() {
                     <ListSubheader component="div" >
                         <h4 className={classes.drawerSubtitle}>Gatunki</h4>
                     </ListSubheader>
-                    {genres.map((genre) => (
-                        <ListItem button component={NavLink} to={"/gatunek/" + genre.name.toLowerCase()}  key={genre.name}>
+                    {filmtypes.map((filmtype) => (
+                        <ListItem button component={NavLink} to={"/gatunek/" + filmtype.filmtype.toLowerCase()}  key={filmtype.filmtype}>
                             <ListItemIcon><ChevronRight style={{ color: colors.common.white }}/></ListItemIcon>
-                            <ListItemText primary={genre.name}/>
+                            <ListItemText primary={filmtype.filmtype}/>
                         </ListItem>
                     ))}
                 </List>

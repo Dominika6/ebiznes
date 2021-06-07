@@ -41,7 +41,7 @@ export default function BasketContextProvider({children}) {
         setLocalStorage(val);
     };
 
-    const setPayment = (payId) => {
+    const setPay = (payId) => {
         const val = {
             ...basket,
             pay: payId
@@ -59,14 +59,14 @@ export default function BasketContextProvider({children}) {
     };
 
     const getBasketMovies = basket.movies;
-    const getBasketPayment = basket.pay;
+    const getBasketPay = basket.pay;
 
     const value = {
         getBasketMovies,
-        getBasketPayment,
+        getBasketPay,
         addMovieToBasket,
         removeMovieFromBasket,
-        setPayment,
+        setPay,
         isMovieAlreadyAdded,
         removeAllMoviesFromBasket
     };

@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import {useHistory, useParams} from "react-router-dom";
-import {genreApi} from "./genre.api";
-import {movieApi} from "./movie.api";
+import {filmtypeApi} from "../utils/api/filmtype.api";
+import {movieApi} from "../utils/api/movie.api";
 import MovieGrid from "./MovieGrid";
 
-export default function GenreMovies() {
+export default function FilmtypeMovies() {
     const [movies, setMovies] = useState([]);
     const [gridTitle, setGridTitle] = useState(null);
     const urlParams = useParams();
@@ -12,21 +12,21 @@ export default function GenreMovies() {
 
     useEffect(() => {
         const fetchData = async () => {
-            const genres = await genreApi.getAll();
-            const _genre = genres.find(genre => genre.name.toLowerCase() === urlParams.filmtypeName);
+            const filmtypes = await filmtypeApi.getAll();
+            const _filmtype = filmtypes.find(filmtype => filmtype.filmtype.toLowerCase() === urlParams.filmtypeName);
 
-            if (!_genre) {
+            if (!_filmtype) {
                 history.push('/');
                 return
             }
-            let _movies = await movieApi.getForGenre(_genre.id);
-            setGridTitle(_genre.name);
+            let _movies = await movieApi.getForFilmtype(_filmtype.id);
+            setGridTitle(_filmtype.filmtype);
 
             setMovies(_movies);
         };
 
         fetchData();
-    }, [urlParams.filmtypeName]);
+    }, [history, urlParams.filmtypeName]);
 
 
     return (

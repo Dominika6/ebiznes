@@ -5,10 +5,10 @@ import makeStyles from "@material-ui/core/styles/makeStyles";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import Stepper from "@material-ui/core/Stepper";
-import {movieApi} from "./movie.api";
+import {movieApi} from "../utils/api/movie.api";
 import {UserContext} from "./UserContext";
 import BasketMovieStep from "./BasketMovieStep";
-import BasketPaymentStep from "./BasketPaymentStep";
+import BasketPayStep from "./BasketPayStep";
 import BasketSummaryStep from "./BasketSummaryStep";
 import Alert from "@material-ui/lab/Alert/Alert";
 
@@ -51,7 +51,7 @@ export default function Basket() {
             setBasketMovies(movies);
         };
         fetchData();
-    }, [getBasketMovies]);
+    }, [getBasketMovies, userCtx.user]);
 
     const classes = useStyles();
     const [activeStep, setActiveStep] = React.useState(0);
@@ -82,7 +82,7 @@ export default function Basket() {
 
             <Stepper activeStep={activeStep} orientation="vertical">
                 <BasketMovieStep handleNext={handleNext} basketMovies={basketMovies}/>
-                <BasketPaymentStep handleNext={handleNext} handleBack={handleBack}/>
+                <BasketPayStep handleNext={handleNext} handleBack={handleBack}/>
                 <BasketSummaryStep
                     handleNext={handleNext}
                     handleBack={handleBack}

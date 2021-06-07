@@ -1,6 +1,10 @@
-@import models.User
-@(order: Form[CreateOrderForm], users: Seq[User], pays: Seq[Pay], movies: Seq[Movie])(implicit request: Request[_], flash: Flash)
+@(order: Form[CreateOrderForm],
+        users: Seq[User],
+        pays: Seq[Pay],
+        movies: Seq[Movie]
+)(implicit request: Request[_], flash: Flash)
 
+@import models.auth.User
 @import views.html.bootstrap3._
 
 @main("Złóż zamówienie") {
@@ -53,8 +57,4 @@
             @submit()
         }
     </div>
-
 }
-
-
-

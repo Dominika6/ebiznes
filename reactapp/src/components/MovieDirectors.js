@@ -1,7 +1,7 @@
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText/ListItemText";
 import React, {useEffect, useState} from "react";
-import {movieApi} from "./movie.api";
+import {movieApi} from "../utils/api/movie.api";
 import {NavLink} from "react-router-dom";
 
 export default function MovieDirectors({movieId}) {
@@ -24,5 +24,4 @@ export default function MovieDirectors({movieId}) {
             ))}
         </>
     )
-
 }

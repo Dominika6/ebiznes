@@ -31,7 +31,7 @@ object Login {
 }
 
 
-class AuthnApiController @Inject()(cc: ControllerComponents,
+class AuthApiController @Inject()(cc: ControllerComponents,
                                             userService: UserService,
                                             errorHandler: JsonErrorHandler,
                                             silhouetteJwt: Silhouette[JwtEnv],
@@ -45,7 +45,7 @@ class AuthnApiController @Inject()(cc: ControllerComponents,
 
   val jwtAuthService: AuthenticatorService[JWTAuthenticator] = silhouetteJwt.env.authenticatorService
 
-  def Registration(): Action[JsValue] = Action(parse.json).async { implicit request =>
+  def registration(): Action[JsValue] = Action(parse.json).async { implicit request =>
     val body = request.body
     body.validate[Registration].fold(
       errors => {

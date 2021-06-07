@@ -1,8 +1,9 @@
+@(comments: Seq[(Comment, Movie, User)])(implicit flash: Flash)
+
 @import models.Comment
+@import models.auth.User
 @import views.html.bootstrap3._
 
-@import models.User
-@(comments: Seq[(Comment, Movie, User)])(implicit flash: Flash)
     @main("Komentarze") {
         @alerts(flash)
         <table class="table" summary="Komentarze">
@@ -20,7 +21,7 @@
                 <tr>
                     <th scope="row"><span class="badge badge-light">@comment._1.commentId</span></th>
                     <td>@comment._3.firstName @comment._3.surname</td>
-                    <td><a href="@controllers.routes.MovieController.get(comment._2.commentId)">@comment._2.title</a></td>
+                    <td><a href="@controllers.routes.MovieController.get(comment._2.movieId)">@comment._2.title</a></td>
                     <td>@comment._1.comment</td>
                     <td class="text-right">
                         <a class="btn btn-sm btn-outline-info" href="@controllers.routes.CommentController.update(comment._1.commentId)" role="button">Edytuj</a>

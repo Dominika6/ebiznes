@@ -1,5 +1,6 @@
-@import models.Director
 @(director: Director, movies: Seq[Movie])
+
+@import models.Director
 
 @main(director.firstName + " " + director.surname) {
     <table class="table" summary="Filmy rezysera">
@@ -18,7 +19,7 @@
                 <th scope="row">@movie.movieId</th>
                 <td><a href="@controllers.routes.MovieController.get(movie.movieId)">@movie.title</a></td>
                 <td>@(movie.details.substring(0, 64))...</td>
-                <td>@movie.price zł</td>
+                <td>@movie.price</td>
                 <td>@movie.publicationDate</td>
             </tr>
         }

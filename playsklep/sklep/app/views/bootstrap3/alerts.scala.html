@@ -1,0 +1,19 @@
+@(flash: Flash)
+
+<div class="col px-0 pb-2">
+    @if(flash.get("error")) {
+        <div class="alert alert-danger" role="alert">
+        @flash.get("error").getOrElse("")
+        </div>
+    }
+    @if(flash.get("success")) {
+        <div class="alert alert-success" role="alert">
+        @flash.get("success").getOrElse("")
+        </div>
+    }
+    @if(flash.get("info")) {
+        <div class="alert alert-info" role="alert">
+        @flash.get("info").getOrElse("")
+        </div>
+    }
+</div>

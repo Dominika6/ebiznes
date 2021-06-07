@@ -3,7 +3,7 @@ import {UserContext} from "./UserContext";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import Box from "@material-ui/core/Box";
-import {commentApi} from "./comment.api";
+import {commentApi} from "../utils/api/comment.api";
 import Alert from "@material-ui/lab/Alert/Alert";
 import Snackbar from "@material-ui/core/Snackbar/Snackbar";
 

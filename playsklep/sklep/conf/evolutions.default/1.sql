@@ -3,13 +3,13 @@
 PRAGMA foreign_keys = true;
 
 CREATE TABLE "actor" (
-                         "actorId" VARCHAR NOT NULL PRIMARY KEY,
+                         "actorId" VARCHAR NOT NULL PRIMARY KEY AUTO_INCREMENT,
                          "firstName" VARCHAR NOT NULL,
                          "surname" VARCHAR NOT NULL
 );
 
 CREATE TABLE "comment" (
-                           "commentId" VARCHAR NOT NULL PRIMARY KEY ,
+                           "commentId" VARCHAR NOT NULL PRIMARY KEY AUTO_INCREMENT,
                            "comment" VARCHAR NOT NULL,
                            "userId" VARCHAR NOT NULL,
                            "movieId" VARCHAR NOT NULL,
@@ -18,14 +18,14 @@ CREATE TABLE "comment" (
 );
 
 CREATE TABLE "director" (
-                            "directorId" VARCHAR NOT NULL PRIMARY KEY,
+                            "directorId" VARCHAR NOT NULL PRIMARY KEY AUTO_INCREMENT,
                             "firstName" VARCHAR NOT NULL,
                             "surname" VARCHAR NOT NULL
 );
 
 
 CREATE TABLE "movie" (
-                         "movieId" VARCHAR NOT NULL PRIMARY KEY,
+                         "movieId" VARCHAR NOT NULL PRIMARY KEY AUTO_INCREMENT,
                          "title" VARCHAR NOT NULL,
                          "publicationDate" VARCHAR NOT NULL,
                          "price" FLOAT NOT NULL,
@@ -48,7 +48,7 @@ CREATE TABLE "movieAndDirector" (
                                     FOREIGN KEY ("directorId") REFERENCES director("directorId") ON DELETE CASCADE
 );
 
-CREATE TABLE "movieAndType" (
+CREATE TABLE "movieAndFilmtype" (
                                 "movieId" VARCHAR NOT NULL,
                                 "filmtypeId" VARCHAR NOT NULL,
                                 PRIMARY KEY ("movieId", "filmtypeId"),
@@ -66,12 +66,12 @@ CREATE TABLE "movieToOrder" (
 );
 
 CREATE TABLE "filmtype" (
-                        "filmtypeId" VARCHAR NOT NULL PRIMARY KEY,
+                        "filmtypeId" VARCHAR NOT NULL PRIMARY KEY AUTO_INCREMENT,
                         "filmtype" VARCHAR NOT NULL
 );
 
 CREATE TABLE "order" (
-                         "orderId" VARCHAR NOT NULL PRIMARY KEY ,
+                         "orderId" VARCHAR NOT NULL PRIMARY KEY AUTO_INCREMENT,
                          "userId" VARCHAR NOT NULL,
                          "payId" VARCHAR NOT NULL,
                          FOREIGN KEY ("userId") REFERENCES user("userId") ON DELETE CASCADE,
@@ -79,12 +79,12 @@ CREATE TABLE "order" (
 );
 
 CREATE TABLE "pay" (
-                       "payId" VARCHAR NOT NULL PRIMARY KEY,
+                       "payId" VARCHAR NOT NULL PRIMARY KEY AUTO_INCREMENT,
                        "method" VARCHAR NOT NULL
 );
 
 CREATE TABLE "rate" (
-                        "rateId" VARCHAR NOT NULL PRIMARY KEY ,
+                        "rateId" VARCHAR NOT NULL PRIMARY KEY AUTO_INCREMENT,
                         "userId" VARCHAR NOT NULL,
                         "movieId" VARCHAR NOT NULL,
                         "result" INT NOT NULL,
@@ -93,11 +93,39 @@ CREATE TABLE "rate" (
 );
 
 CREATE TABLE "user" (
-                        "userId" VARCHAR NOT NULL PRIMARY KEY,
+                        "userId" VARCHAR NOT NULL PRIMARY KEY AUTO_INCREMENT,
                         "firstName" VARCHAR NOT NULL,
                         "surname" VARCHAR NOT NULL,
                         "email" VARCHAR NOT NULL,
                         "role" VARCHAR NOT NULL
+);
+
+
+CREATE TABLE "password" (
+                            "loginInfoId" VARCHAR NOT NULL PRIMARY KEY,
+                            "hasher" VARCHAR NOT NULL,
+                            "hash" VARCHAR NOT NULL,
+                            "salt" VARCHAR
+);
+
+CREATE TABLE "login_info" (
+                              "id" VARCHAR NOT NULL PRIMARY KEY,
+                              "providerId" VARCHAR NOT NULL,
+                              "providerKey" VARCHAR NOT NULL
+);
+
+CREATE TABLE "user_login_info" (
+                                   "userId" VARCHAR NOT NULL,
+                                   "loginInfoId" VARCHAR NOT NULL
+);
+
+CREATE TABLE "OAuth2Info" (
+                              "id" VARCHAR NOT NULL PRIMARY KEY,
+                              "accessToken" VARCHAR NOT NULL,
+                              "tokenType" VARCHAR,
+                              "expiresIn" INTEGER,
+                              "refreshToken" VARCHAR,
+                              "loginInfoId" VARCHAR NOT NULL
 );
 
 
@@ -116,29 +144,33 @@ INSERT INTO movieAndActor VALUES ('2', '2');
 INSERT INTO movieAndDirector VALUES ('1', '1');
 INSERT INTO movieAndDirector VALUES ('2', '2');
 
-INSERT INTO movieAndType VALUES ('1', '1');
-INSERT INTO movieAndType VALUES ('2', '2');
+INSERT INTO movieAndFilmtype VALUES ('1', '1');
+INSERT INTO movieAndFilmtype VALUES ('2', '2');
 
-INSERT INTO filmtype VALUES ('1', 'Type 1');
-INSERT INTO filmtype VALUES ('2', 'Type 2');
+INSERT INTO filmtype VALUES ('1', 'Filmtype 1');
+INSERT INTO filmtype VALUES ('2', 'Filmtype 2');
 
-INSERT INTO payment VALUES ('1', 'Method 1');
-INSERT INTO payment VALUES ('2', 'Method 2');
+INSERT INTO pay VALUES ('1', 'Method 1');
+INSERT INTO pay VALUES ('2', 'Method 2');
 
 
 
 # --- !Downs
 
-DROP TABLE actor IF EXISTS;
-DROP TABLE comment IF EXISTS;
-DROP TABLE director IF EXISTS;
-DROP TABLE movie IF EXISTS;
-DROP TABLE movieAndActor IF EXISTS;
-DROP TABLE movieAndDirector IF EXISTS;
-DROP TABLE movieAndType IF EXISTS;
-DROP TABLE movieToOrder IF EXISTS;
-DROP TABLE filmtype IF EXISTS;
-DROP TABLE [order] IF EXISTS;
-DROP TABLE pay IF EXISTS;
-DROP TABLE rate IF EXISTS;
-DROP TABLE [user] IF EXISTS;
+DROP TABLE "actor" IF EXISTS;
+DROP TABLE "comment" IF EXISTS;
+DROP TABLE "director" IF EXISTS;
+DROP TABLE "movie" IF EXISTS;
+DROP TABLE "movieAndActor" IF EXISTS;
+DROP TABLE "movieAndDirector" IF EXISTS;
+DROP TABLE "movieAndFilmtype" IF EXISTS;
+DROP TABLE "movieToOrder" IF EXISTS;
+DROP TABLE "filmtype" IF EXISTS;
+DROP TABLE "order" IF EXISTS;
+DROP TABLE "pay" IF EXISTS;
+DROP TABLE "rate" IF EXISTS;
+DROP TABLE "user" IF EXISTS;
+DROP TABLE "password" IF EXISTS;
+DROP TABLE "login_info" IF EXISTS;
+DROP TABLE "user_login_info" IF EXISTS;
+DROP TABLE "OAuth2Info" IF EXISTS;

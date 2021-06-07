@@ -1,6 +1,9 @@
-@import models.User
-@(comment: Form[CreateCommentForm], users: Seq[User], movies: Seq[Movie])(implicit request: Request[_], flash: Flash)
+@(comment: Form[CreateCommentForm],
+        users: Seq[User],
+        movies: Seq[Movie]
+)(implicit request: Request[_], flash: Flash)
 
+@import models.auth.User
 @import views.html.bootstrap3._
 
 @main("Dodaj komentarz do filmu") {

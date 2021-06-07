@@ -1,4 +1,6 @@
-@(directorId: String, director: Form[CreateDirectorForm])(implicit request: Request[_], flash: Flash)
+@(directorId: String,
+        director: Form[CreateDirectorForm]
+)(implicit request: Request[_], flash: Flash)
 
 @import views.html.bootstrap3._
 
@@ -12,8 +14,4 @@
             @submit("Edytuj")
         }
     </div>
-
 }
-
-
-

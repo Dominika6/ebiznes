@@ -1,7 +1,8 @@
+@(pays: Seq[Pay])(implicit flash: Flash)
+
 @import models.Pay
 @import views.html.bootstrap3._
 
-@(pays: Seq[Pay])(implicit flash: Flash)
 @main("Płatności") {
     @alerts(flash)
     <table class="table" summary="Platnosci">

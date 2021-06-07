@@ -1,5 +1,7 @@
-@import models.Filmtype
 @(filmtype: Filmtype, movies: Seq[Movie])
+
+@import models.Filmtype
+
 @main(filmtype.filmtype) {
     <table class="table" summary="Filmy z gatunku">
         <thead>

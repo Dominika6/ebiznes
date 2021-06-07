@@ -16,13 +16,15 @@ export default function MovieGrid({movies, setMovies, title}) {
     return (
         <Box m={2}>
             {title ? <h3>{title}</h3> : null}
-            <Box mb={2}>
-                <ButtonGroup aria-label="outlined button group">
-                    <Button variant="outlined" onClick={() => sort('rate')}>Najlepiej oceniane</Button>
-                    <Button onClick={() => sort('publicationDate')}>Najnowsze</Button>
-                    <Button onClick={() => sort('title', 'asc')}>Alfabetycznie</Button>
-                </ButtonGroup>
-            </Box>
+            <h4>Wszystkie nasze filmy:</h4>
+
+            {/*<Box mb={2}>*/}
+            {/*    <ButtonGroup aria-label="outlined button group">*/}
+            {/*        <Button variant="outlined" onClick={() => sort('rate')}>Najlepiej oceniane</Button>*/}
+            {/*        <Button onClick={() => sort('publicationDate')}>Najnowsze</Button>*/}
+            {/*        <Button onClick={() => sort('title', 'asc')}>Alfabetycznie</Button>*/}
+            {/*    </ButtonGroup>*/}
+            {/*</Box>*/}
             <Grid container spacing={5}>
                 {movies.map(movie => (
                     <MovieGridItem key={movie.movieId} movie={movie}/>
