@@ -27,7 +27,7 @@ class UserController @Inject()(userRepository: UserService, cc: MessagesControll
   }
 
   def delete(userId: String): Action[AnyContent] = silhouette.SecuredAction(RoleCookieAuthorization(UserRoles.Admin)).async { implicit request: Request[_] =>
-    userRepository.delete(userId).map(_ => Redirect(routes.UserController.getAll()).flashing("info" -> "Użytkownik usunięty"))
+    userRepository.delete(userId).map(_ => Redirect(routes.UserController.getAll).flashing("info" -> "Użytkownik usunięty"))
   }
 
   def update(userId: String): Action[AnyContent] = silhouette.SecuredAction(RoleCookieAuthorization(UserRoles.Admin)) { implicit request: Request[_] =>
@@ -49,7 +49,7 @@ class UserController @Inject()(userRepository: UserService, cc: MessagesControll
         userRole = UserRoles.Admin
       }
       userRepository.update(userId, user.firstName, user.surname, userEmail, userRole).map { _ =>
-        Redirect(routes.UserController.getAll()).flashing("success" -> "Użytkownik zmodyfikowany")
+        Redirect(routes.UserController.getAll).flashing("success" -> "Użytkownik zmodyfikowany")
       };
     }
     createUserForm.bindFromRequest.fold(errorFunction, successFunction)

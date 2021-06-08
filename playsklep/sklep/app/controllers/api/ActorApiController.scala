@@ -1,4 +1,4 @@
-package controllers.apiJWTAuthenticator
+package controllers.api
 import com.mohiva.play.silhouette.api.Silhouette
 import models.auth.UserRoles
 import javax.inject.{Inject, Singleton}

@@ -30,7 +30,7 @@ class FilmtypeController @Inject()(filmtypeRepository: FilmtypeRepository, movie
 
     filmtypeRepository.getById(filmtypeId) map {
       case Some(g) => Ok(views.html.filmtype(g, movies))
-      case None => Redirect(routes.FilmtypeController.getAll())
+      case None => Redirect(routes.FilmtypeController.getAll)
     }
   }
 
@@ -42,20 +42,20 @@ class FilmtypeController @Inject()(filmtypeRepository: FilmtypeRepository, movie
   def createFilmtypeHandler: Action[AnyContent] = silhouette.SecuredAction(RoleCookieAuthorization(UserRoles.Admin)).async { implicit request: Request[_]  =>
     val errorFunction = { formWithErrors: Form[CreateFilmtypeForm] =>
       Future {
-        Redirect(routes.FilmtypeController.create()).flashing("error" -> "Błąd podczas dodawania gatunku!")
+        Redirect(routes.FilmtypeController.create).flashing("error" -> "Błąd podczas dodawania gatunku!")
       }
     }
 
     val successFunction = { filmtype: CreateFilmtypeForm =>
       filmtypeRepository.create(filmtype.name).map { _ =>
-        Redirect(routes.FilmtypeController.getAll()).flashing("success" -> "Gatunek dodany!")
+        Redirect(routes.FilmtypeController.getAll).flashing("success" -> "Gatunek dodany!")
       };
     }
     createFilmtypeForm.bindFromRequest.fold(errorFunction, successFunction)
   }
 
   def delete(filmtypeId: String): Action[AnyContent] = silhouette.SecuredAction(RoleCookieAuthorization(UserRoles.Admin)).async { implicit request: Request[_]  =>
-    filmtypeRepository.delete(filmtypeId).map(_ => Redirect(routes.FilmtypeController.getAll()).flashing("info" -> "Gatunek usunięty!"))
+    filmtypeRepository.delete(filmtypeId).map(_ => Redirect(routes.FilmtypeController.getAll).flashing("info" -> "Gatunek usunięty!"))
   }
 
   def update(filmtypeId: String): Action[AnyContent] = silhouette.SecuredAction(RoleCookieAuthorization(UserRoles.Admin)) { implicit request: Request[_]  =>
@@ -73,7 +73,7 @@ class FilmtypeController @Inject()(filmtypeRepository: FilmtypeRepository, movie
 
     val successFunction = { filmtype: CreateFilmtypeForm =>
       filmtypeRepository.update(filmtypeId, filmtype.name).map { _ =>
-        Redirect(routes.FilmtypeController.getAll()).flashing("success" -> "Gatunek zmodyfikowany!")
+        Redirect(routes.FilmtypeController.getAll).flashing("success" -> "Gatunek zmodyfikowany!")
       };
     }
     createFilmtypeForm.bindFromRequest.fold(errorFunction, successFunction)

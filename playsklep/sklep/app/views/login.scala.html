@@ -5,7 +5,7 @@
 @main("Zaloguj się", false) {
     <div class="col">
         @alerts(flash)
-        @helper.form(controllers.routes.AuthController.loginHandler()) {
+        @helper.form(controllers.routes.AuthController.loginHandler) {
             @helper.CSRF.formField
             @text(user("email"), "E-mail")
             @password(user("password"), "Hasło")

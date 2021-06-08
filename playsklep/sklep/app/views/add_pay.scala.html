@@ -5,7 +5,7 @@
 @main("Dodaj typ płatności") {
     <div class="col">
         @alerts(flash)
-        @helper.form(controllers.routes.PayController.createPayHandler()) {
+        @helper.form(controllers.routes.PayController.createPayHandler) {
             @helper.CSRF.formField
             @text(filmtype("filmtype"), "Nazwa")
             @submit()

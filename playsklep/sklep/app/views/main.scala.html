@@ -35,11 +35,11 @@
             } else {
                 @if(!onRegistrationPage) {
                     <div class="col">
-                        <a href="@controllers.routes.AuthController.registration()" class="btn btn-light float-right" role="button" aria-pressed="true">Zarejestruj się</a>
+                        <a href="@controllers.routes.AuthController.registration" class="btn btn-light float-right" role="button" aria-pressed="true">Zarejestruj się</a>
                     </div>
                 } else {
                     <div class="col">
-                        <a href="@controllers.routes.AuthController.login()" class="btn btn-light float-right" role="button" aria-pressed="true">Zaloguj się</a>
+                        <a href="@controllers.routes.AuthController.login" class="btn btn-light float-right" role="button" aria-pressed="true">Zaloguj się</a>
                     </div>
                 }
             }

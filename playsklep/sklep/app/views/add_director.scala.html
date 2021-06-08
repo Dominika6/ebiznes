@@ -5,7 +5,7 @@
 @main("Dodaj reżysera") {
     <div class="col">
         @alerts(flash)
-        @helper.form(controllers.routes.DirectorController.createDirectorHandler()) {
+        @helper.form(controllers.routes.DirectorController.createDirectorHandler) {
             @helper.CSRF.formField
             @text(director("firstName"), "Imię")
             @text(director("surname"), "Nazwisko")

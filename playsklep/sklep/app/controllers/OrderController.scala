@@ -39,7 +39,7 @@ class OrderController @Inject()(
 
     orderRepository.getByIdWithUserAndPay(orderId) map {
       case Some(o) => Ok(views.html.order(o, orderItems, value))
-      case None => Redirect(routes.OrderController.getAll())
+      case None => Redirect(routes.OrderController.getAll)
     }
   }
 
@@ -53,13 +53,13 @@ class OrderController @Inject()(
   def createOrderHandler: Action[AnyContent] = silhouette.SecuredAction(RoleCookieAuthorization(UserRoles.Admin)).async { implicit request: Request[_]  =>
     val errorFunction = { formWithErrors: Form[CreateOrderForm] =>
       Future {
-        Redirect(routes.OrderController.create()).flashing("error" -> "Błąd podczas składania zamówienia")
+        Redirect(routes.OrderController.create).flashing("error" -> "Błąd podczas składania zamówienia")
       }
     }
 
     val successFunction = { order: CreateOrderForm =>
       orderRepository.create(order.user, order.pay, order.movies).map { _ =>
-        Redirect(routes.OrderController.getAll()).flashing("success" -> "Zamówienie złożone")
+        Redirect(routes.OrderController.getAll).flashing("success" -> "Zamówienie złożone")
       };
     }
     createOrderForm.bindFromRequest.fold(errorFunction, successFunction)
@@ -89,14 +89,14 @@ class OrderController @Inject()(
 
     val successFunction = { order: CreateOrderForm =>
       orderRepository.update(orderId, order.user, order.pay, order.movies).map { _ =>
-        Redirect(routes.OrderController.getAll()).flashing("success" -> "Zamówienie zmodyfikowane")
+        Redirect(routes.OrderController.getAll).flashing("success" -> "Zamówienie zmodyfikowane")
       };
     }
     createOrderForm.bindFromRequest.fold(errorFunction, successFunction)
   }
 
   def delete(orderId: String): Action[AnyContent] = silhouette.SecuredAction(RoleCookieAuthorization(UserRoles.Admin)).async { implicit request: Request[_]  =>
-    orderRepository.delete(orderId).map(_ => Redirect(routes.OrderController.getAll()).flashing("info" -> "Zamówienie usunięte"))
+    orderRepository.delete(orderId).map(_ => Redirect(routes.OrderController.getAll).flashing("info" -> "Zamówienie usunięte"))
   }
 }
 

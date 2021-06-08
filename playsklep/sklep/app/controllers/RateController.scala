@@ -39,20 +39,20 @@ class RateController @Inject()(rateRepository: RateRepository, userRepository: U
   def createRateHandler: Action[AnyContent] = silhouette.SecuredAction(RoleCookieAuthorization(UserRoles.Admin)).async { implicit request: Request[_]  =>
     val errorFunction = { formWithErrors: Form[CreateRateForm] =>
       Future {
-        Redirect(routes.RateController.create()).flashing("error" -> "Błąd podczas dodawania oceny")
+        Redirect(routes.RateController.create).flashing("error" -> "Błąd podczas dodawania oceny")
       }
     }
 
     val successFunction = { rate: CreateRateForm =>
       rateRepository.create(rate.result, rate.userId, rate.movieId).map { _ =>
-        Redirect(routes.RateController.getAll()).flashing("success" -> "Ocena dodana")
+        Redirect(routes.RateController.getAll).flashing("success" -> "Ocena dodana")
       };
     }
     createRateForm.bindFromRequest.fold(errorFunction, successFunction)
   }
 
   def delete(rateId: String): Action[AnyContent] = silhouette.SecuredAction(RoleCookieAuthorization(UserRoles.Admin)).async { implicit request: Request[_]  =>
-    rateRepository.delete(rateId).map(_ => Redirect(routes.RateController.getAll()).flashing("info" -> "Ocena filmu została usunięta"))
+    rateRepository.delete(rateId).map(_ => Redirect(routes.RateController.getAll).flashing("info" -> "Ocena filmu została usunięta"))
   }
 
 
@@ -73,7 +73,7 @@ class RateController @Inject()(rateRepository: RateRepository, userRepository: U
 
     val successFunction = { rate: CreateRateForm =>
       rateRepository.update(rateId, rate.result, rate.userId, rate.movieId).map { _ =>
-        Redirect(routes.RateController.getAll()).flashing("success" -> "Ocena zmodyfikowana")
+        Redirect(routes.RateController.getAll).flashing("success" -> "Ocena zmodyfikowana")
       };
     }
     createRateForm.bindFromRequest.fold(errorFunction, successFunction)

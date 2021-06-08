@@ -9,7 +9,7 @@
 @main("Dodaj film") {
     <div class="col">
         @alerts(flash)
-        @helper.form(controllers.routes.MovieController.createMovieHandler()) {
+        @helper.form(controllers.routes.MovieController.createMovieHandler) {
             @helper.CSRF.formField
             @text(movie("title"), "Tytuł")
             @textarea(movie("details"), "5", "Opis filmu")

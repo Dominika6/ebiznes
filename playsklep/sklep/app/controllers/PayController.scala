@@ -33,20 +33,20 @@ class PayController @Inject()(payRepository: PayRepository, cc: MessagesControll
   def createPayHandler: Action[AnyContent] = silhouette.SecuredAction(RoleCookieAuthorization(UserRoles.Admin)).async { implicit request: Request[_]  =>
     val errorFunction = { formWithErrors: Form[CreatePayForm] =>
       Future {
-        Redirect(routes.PayController.create()).flashing("error" -> "Błąd podczas dodawania typu płatności")
+        Redirect(routes.PayController.create).flashing("error" -> "Błąd podczas dodawania typu płatności")
       }
     }
 
     val successFunction = { pay: CreatePayForm =>
       payRepository.create(pay.method).map { _ =>
-        Redirect(routes.PayController.getAll()).flashing("success" -> "Typ płatności dodany")
+        Redirect(routes.PayController.getAll).flashing("success" -> "Typ płatności dodany")
       };
     }
     createPayForm.bindFromRequest.fold(errorFunction, successFunction)
   }
 
   def delete(payId: String): Action[AnyContent] = silhouette.SecuredAction(RoleCookieAuthorization(UserRoles.Admin)).async { implicit request: Request[_]  =>
-    payRepository.delete(payId).map(_ => Redirect(routes.PayController.getAll()).flashing("info" -> "Typ płatności usunięty"))
+    payRepository.delete(payId).map(_ => Redirect(routes.PayController.getAll).flashing("info" -> "Typ płatności usunięty"))
   }
 
   def update(payId: String): Action[AnyContent] = silhouette.SecuredAction(RoleCookieAuthorization(UserRoles.Admin)) { implicit request: Request[_]  =>
@@ -64,7 +64,7 @@ class PayController @Inject()(payRepository: PayRepository, cc: MessagesControll
 
     val successFunction = { pay: CreatePayForm =>
       payRepository.update(payId, pay.method).map { _ =>
-        Redirect(routes.PayController.getAll()).flashing("success" -> "Typ płatności zmodyfikowany")
+        Redirect(routes.PayController.getAll).flashing("success" -> "Typ płatności zmodyfikowany")
       };
     }
     createPayForm.bindFromRequest.fold(errorFunction, successFunction)

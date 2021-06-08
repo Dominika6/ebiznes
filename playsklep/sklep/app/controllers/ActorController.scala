@@ -47,7 +47,7 @@ class ActorController @Inject()(
   def createActorHandler: Action[AnyContent] = silhouette.SecuredAction(RoleCookieAuthorization(UserRoles.Admin)).async { implicit request: Request[_]  =>
     val errorFunction = { formWithErrors: Form[CreateActorForm] =>
       Future {
-        Redirect(routes.ActorController.create()).flashing("error" -> "Błąd podczas dodawania aktora!")
+        Redirect(routes.ActorController.create).flashing("error" -> "Błąd podczas dodawania aktora!")
       }
     }
 

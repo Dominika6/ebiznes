@@ -2,6 +2,7 @@ package controllers
 import com.mohiva.play.silhouette.api.Silhouette
 import javax.inject.{Inject, Singleton}
 import models.auth.{User, UserRoles}
+//import models.{User, UserRoles}
 import models.{Comment, Movie}
 import play.api.data.Form
 import play.api.data.Forms._
@@ -41,20 +42,20 @@ class CommentController @Inject()(commentRepository: CommentRepository,
   def createCommentHandler: Action[AnyContent] = silhouette.SecuredAction(RoleCookieAuthorization(UserRoles.Admin)).async { implicit request: Request[_]  =>
     val errorFunction = { formWithErrors: Form[CreateCommentForm] =>
       Future {
-        Redirect(routes.CommentController.create()).flashing("error" -> "Błąd podczas dodawania komentarza!")
+        Redirect(routes.CommentController.create).flashing("error" -> "Błąd podczas dodawania komentarza!")
       }
     }
 
     val successFunction = { comment: CreateCommentForm =>
       commentRepository.create(comment.comment, comment.userId, comment.movieId).map { _ =>
-        Redirect(routes.CommentController.getAll()).flashing("success" -> "Komentarz dodany!")
+        Redirect(routes.CommentController.getAll).flashing("success" -> "Komentarz dodany!")
       };
     }
     createCommentForm.bindFromRequest.fold(errorFunction, successFunction)
   }
 
   def delete(commentId: String): Action[AnyContent] = silhouette.SecuredAction(RoleCookieAuthorization(UserRoles.Admin)).async { implicit request: Request[_]  =>
-    commentRepository.delete(commentId).map(_ => Redirect(routes.CommentController.getAll()).flashing("info" -> "Komentarz został usunięty!"))
+    commentRepository.delete(commentId).map(_ => Redirect(routes.CommentController.getAll).flashing("info" -> "Komentarz został usunięty!"))
   }
 
   def update(commentId: String): Action[AnyContent] = silhouette.SecuredAction(RoleCookieAuthorization(UserRoles.Admin)) { implicit request: Request[_]  =>
@@ -74,7 +75,7 @@ class CommentController @Inject()(commentRepository: CommentRepository,
 
     val successFunction = { comment: CreateCommentForm =>
       commentRepository.update(commentId, comment.comment, comment.userId, comment.movieId).map { _ =>
-        Redirect(routes.CommentController.getAll()).flashing("success" -> "Komentarz zmodyfikowany!")
+        Redirect(routes.CommentController.getAll).flashing("success" -> "Komentarz zmodyfikowany!")
       };
     }
     createCommentForm.bindFromRequest.fold(errorFunction, successFunction)

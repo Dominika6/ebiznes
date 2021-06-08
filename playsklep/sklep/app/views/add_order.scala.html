@@ -10,7 +10,7 @@
 @main("Złóż zamówienie") {
     <div class="col">
         @alerts(flash)
-        @helper.form(controllers.routes.OrderController.createOrderHandler()) {
+        @helper.form(controllers.routes.OrderController.createOrderHandler) {
             @helper.CSRF.formField
             <div class="form-group">
                 <label class="col-sm-2 control-label">Użytkownik</label>

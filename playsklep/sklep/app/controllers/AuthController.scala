@@ -67,7 +67,7 @@ class AuthController @Inject()(cc: MessagesControllerComponents,
   def registrationHandler: Action[AnyContent] = Action.async { implicit request =>
     val errorFunction = { formWithErrors: Form[Registration] =>
       Future {
-        Redirect(routes.AuthController.registration()).flashing("error" -> "Błąd podczas rejestracji!")
+        Redirect(routes.AuthController.registration).flashing("error" -> "Błąd podczas rejestracji!")
       }
     }
 
@@ -75,7 +75,7 @@ class AuthController @Inject()(cc: MessagesControllerComponents,
       val loginInfo = LoginInfo(CredentialsProvider.ID, user.email)
       userService.retrieve(loginInfo).flatMap {
         case Some(u) => Future {
-          Redirect(routes.AuthController.registration()).flashing("error" -> "Taki uzytkownik (email) juz istnieje!")
+          Redirect(routes.AuthController.registration).flashing("error" -> "Taki uzytkownik (email) juz istnieje!")
         }
         case None =>
           for {
@@ -97,7 +97,7 @@ class AuthController @Inject()(cc: MessagesControllerComponents,
   def loginHandler: Action[AnyContent] = Action.async { implicit request =>
     val errorFunction = { formWithErrors: Form[Login] =>
       Future {
-        Redirect(routes.AuthController.login()).flashing("error" -> "Błąd podczas logowania!")
+        Redirect(routes.AuthController.login).flashing("error" -> "Błąd podczas logowania!")
       }
     }
 
@@ -109,7 +109,7 @@ class AuthController @Inject()(cc: MessagesControllerComponents,
             .flatMap(cookieAuthService.embed(_, Redirect(routes.HomeController.index()).flashing("success" -> "Zalogowano poprawnie")))
         }.recover {
         case e: Exception =>
-          Redirect(routes.AuthController.login()).flashing("error" -> e.getMessage)
+          Redirect(routes.AuthController.login).flashing("error" -> e.getMessage)
       }
     }
     loginForm.bindFromRequest.fold(errorFunction, successFunction)
@@ -117,7 +117,7 @@ class AuthController @Inject()(cc: MessagesControllerComponents,
 
   def logout: Action[AnyContent] = silhouetteCookie.SecuredAction(errorHandler).async { implicit request =>
     cookieEventBus.publish(LogoutEvent(request.identity, request))
-    cookieAuthService.discard(request.authenticator, Redirect(routes.AuthController.login()).flashing("info" -> "Wylogowano!"))
+    cookieAuthService.discard(request.authenticator, Redirect(routes.AuthController.login).flashing("info" -> "Wylogowano!"))
   }
 }
 

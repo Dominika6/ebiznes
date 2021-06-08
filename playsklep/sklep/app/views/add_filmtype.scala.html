@@ -5,7 +5,7 @@
 @main("Dodaj gatunek filmowy") {
     <div class="col">
         @alerts(flash)
-        @helper.form(controllers.routes.FilmtypeController.createFilmtypeHandler()) {
+        @helper.form(controllers.routes.FilmtypeController.createFilmtypeHandler) {
             @helper.CSRF.formField
             @text(filmtype("filmtype"), "Nazwa")
             @submit()

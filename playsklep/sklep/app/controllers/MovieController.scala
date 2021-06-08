@@ -48,7 +48,7 @@ class MovieController @Inject()(
 
     movieRepository.getById(movieId) map {
       case Some(m) => Ok(views.html.movie(m, comments, ratings, actors, directors, filmtypes))
-      case None => Redirect(routes.MovieController.getAll())
+      case None => Redirect(routes.MovieController.getAll)
     }
   }
 
@@ -60,19 +60,19 @@ class MovieController @Inject()(
   }
 
   def delete(movieId: String): Action[AnyContent] = silhouette.SecuredAction(RoleCookieAuthorization(UserRoles.Admin)).async { implicit request: Request[_]  =>
-    movieRepository.delete(movieId).map(_ => Redirect(routes.MovieController.getAll()).flashing("info" -> "Film usunięty"))
+    movieRepository.delete(movieId).map(_ => Redirect(routes.MovieController.getAll).flashing("info" -> "Film usunięty"))
   }
 
   def createMovieHandler: Action[AnyContent] = silhouette.SecuredAction(RoleCookieAuthorization(UserRoles.Admin)).async { implicit request: Request[_]  =>
     val errorFunction = { formWithErrors: Form[CreateMovieForm] =>
       Future {
-        Redirect(routes.MovieController.create()).flashing("error" -> "Błąd podczas dodawania filmu")
+        Redirect(routes.MovieController.create).flashing("error" -> "Błąd podczas dodawania filmu")
       }
     }
 
     val successFunction = { movie: CreateMovieForm =>
       movieRepository.create(movie.title, movie.publicationDate, movie.price, movie.details, movie.actors, movie.directors, movie.filmtypes).map { _ =>
-        Redirect(routes.MovieController.getAll()).flashing("success" -> "Film dodany")
+        Redirect(routes.MovieController.getAll).flashing("success" -> "Film dodany")
       }
     }
     createMovieForm.bindFromRequest.fold(errorFunction, successFunction)
@@ -110,7 +110,7 @@ class MovieController @Inject()(
 
     val successFunction = { movie: CreateMovieForm =>
       movieRepository.update(movieId, movie.title, movie.publicationDate, movie.price, movie.details, movie.actors, movie.directors, movie.filmtypes).map { _ =>
-        Redirect(routes.MovieController.getAll()).flashing("success" -> "Film zmodyfikowany")
+        Redirect(routes.MovieController.getAll).flashing("success" -> "Film zmodyfikowany")
       }
     }
     createMovieForm.bindFromRequest.fold(errorFunction, successFunction)

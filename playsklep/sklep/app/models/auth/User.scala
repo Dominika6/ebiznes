@@ -26,7 +26,8 @@ class UserTable(tag: Tag) extends Table[User](tag, "user") {
 }
 
 object User {
-  implicit val userFormat: OFormat[User] = Json.format[User]
+  implicit val userFormat = Json.format[User]
+//  implicit val userFormat: OFormat[User] = Json.format[User]
 }
 
 case class Password(loginInfoId: String,

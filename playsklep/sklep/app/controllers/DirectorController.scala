@@ -33,7 +33,7 @@ class DirectorController @Inject()(directorRepository: DirectorRepository, movie
 
     directorRepository.getById(directorId) map {
       case Some(d) => Ok(views.html.director(d, movies))
-      case None => Redirect(routes.DirectorController.getAll())
+      case None => Redirect(routes.DirectorController.getAll)
     }
   }
 
@@ -44,20 +44,20 @@ class DirectorController @Inject()(directorRepository: DirectorRepository, movie
   def createDirectorHandler: Action[AnyContent] = silhouette.SecuredAction(RoleCookieAuthorization(UserRoles.Admin)).async { implicit request: Request[_]  =>
     val errorFunction = { formWithErrors: Form[CreateDirectorForm] =>
       Future {
-        Redirect(routes.DirectorController.create()).flashing("error" -> "Błąd podczas dodawania reżysera")
+        Redirect(routes.DirectorController.create).flashing("error" -> "Błąd podczas dodawania reżysera")
       }
     }
 
     val successFunction = { director: CreateDirectorForm =>
       directorRepository.create(director.firstName, director.surname).map { _ =>
-        Redirect(routes.DirectorController.getAll()).flashing("success" -> "Reżyser dodany")
+        Redirect(routes.DirectorController.getAll).flashing("success" -> "Reżyser dodany")
       };
     }
     createDirectorForm.bindFromRequest.fold(errorFunction, successFunction)
   }
 
   def delete(directorId: String): Action[AnyContent] = silhouette.SecuredAction(RoleCookieAuthorization(UserRoles.Admin)).async { implicit request: Request[_]  =>
-    directorRepository.delete(directorId).map(_ => Redirect(routes.DirectorController.getAll()).flashing("info" -> "Reżyser usunięty"))
+    directorRepository.delete(directorId).map(_ => Redirect(routes.DirectorController.getAll).flashing("info" -> "Reżyser usunięty"))
   }
 
   def update(directorId: String): Action[AnyContent] = silhouette.SecuredAction(RoleCookieAuthorization(UserRoles.Admin)) { implicit request: Request[_]  =>
@@ -75,7 +75,7 @@ class DirectorController @Inject()(directorRepository: DirectorRepository, movie
 
     val successFunction = { director: CreateDirectorForm =>
       directorRepository.update(directorId, director.firstName, director.surname).map { _ =>
-        Redirect(routes.DirectorController.getAll()).flashing("success" -> "Reżyser zmodyfikowany")
+        Redirect(routes.DirectorController.getAll).flashing("success" -> "Reżyser zmodyfikowany")
       };
     }
     createDirectorForm.bindFromRequest.fold(errorFunction, successFunction)

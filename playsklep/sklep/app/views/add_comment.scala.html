@@ -9,7 +9,7 @@
 @main("Dodaj komentarz do filmu") {
     <div class="col">
         @alerts(flash)
-        @helper.form(controllers.routes.CommentController.createCommentHandler()) {
+        @helper.form(controllers.routes.CommentController.createCommentHandler) {
             @helper.CSRF.formField
             @textarea(comment("content"), "5", "Komentarz")
 
